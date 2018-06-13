@@ -1,0 +1,26 @@
+!!! 5
+%html
+  %head
+    %title Senate
+    = csrf_meta_tags
+    = csp_meta_tag
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no'}
+    = stylesheet_link_tag     'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
+    = stylesheet_link_tag     'https://fonts.googleapis.com/css?family=Lato:400,700'
+    = stylesheet_link_tag     'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag  'application', 'data-turbolinks-track': 'reload'
+  %body
+    = render partial: 'shared/nav'
+    .container-fluid
+      .row
+        .col-md-3.d-none.d-md-block
+          = select_tag :term, term_options(@term.id), {class: 'form-control mb-2', id: 'term-select'}
+          %ul
+            - @term.meetings.each do |meeting|
+              %li= link_to meeting.real_name, controller: :meetings, action: :show, id: meeting.id
+        .col-md-9
+          - if flash[:notice]
+            .alert.alert-info{data:{ turbolinks: {temporary: true}}}= flash[:notice]
+          - if flash[:alert]
+            .alert.alert-warning{data:{ turbolinks: {temporary: true}}}= flash[:alert]
+          = yield

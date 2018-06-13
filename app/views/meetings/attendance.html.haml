@@ -1,0 +1,16 @@
+%h1 Attendance
+.table-responsive
+  %table.table
+    %tr
+      %th Seat
+      %th Representative
+      %th Status
+    - @records.each do |record|
+      %tr
+        %td= record.affiliation.name
+        %td= record.who + (record.sub ? " (Sub)" : "")
+        %td= record.humanize
+    - if @records.empty? && @meeting.begin.nil?
+      %td{colspan: "3"} This meeting has not yet been opened.
+    - elsif @records.empty?
+      %td{colspan: "3"} Something went wrong with attendance for this meeting.
