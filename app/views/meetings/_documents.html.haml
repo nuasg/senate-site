@@ -1,0 +1,17 @@
+- {voting: @meeting.voting_documents, non_voting: @meeting.nonvoting_documents}.each do |voting, docs|
+  %div.voting-section
+    - if voting == :voting
+      %h4 Voting
+    - else
+      %h4 Not Voting
+    - if docs.empty?
+      %h6 No documents of this type.
+    - docs.each do |doc|
+      .item-listing
+        .title
+          %span= link_to doc.name, doc.link
+        .middle
+          Voting stuff here
+        - if is_admin?
+          .options
+            %span.fas.fa-ellipsis-v

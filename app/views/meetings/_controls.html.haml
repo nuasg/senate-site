@@ -1,0 +1,9 @@
+- if meeting.open?
+  = button_to 'Open Meeting', {action: :open, id: meeting.id}, {class: 'button', form_class: 'd-inline', disabled: true}
+  = button_to 'Close Meeting', {action: :close, id: meeting.id}, {class: 'button', form_class: 'd-inline'}
+  = link_to 'Edit Attendance', {action: :attendance, time: :begin, id: meeting.id}, {class: 'btn'}
+- elsif meeting.closed?
+  = link_to 'Edit Attendance', {action: :attendance, time: :begin, id: meeting.id}, {class: 'btn'}
+- else
+  = button_to 'Open Meeting', {action: :open, id: meeting.id}, {class: 'button', form_class: 'd-inline'}
+  = button_to 'Close Meeting', {action: :close, id: meeting.id}, {class: 'button', form_class: 'd-inline', disabled: true}

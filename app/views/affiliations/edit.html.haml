@@ -1,0 +1,25 @@
+%h1 Edit Affiliation
+= form_for @affiliation do |f|
+  .row
+    .col
+      .form-group
+        %label{for: 'name'} Affiliation name
+        = f.text_field :name, class: 'form-control'
+  .row
+    .col
+      .form-group
+        %label{for: 'affiliation_type'} Affiliation type
+        = f.select :affiliation_type_id, options_from_collection_for_select(AffiliationType.all, 'id', 'name', @affiliation.type.id), {}, {class: 'form-control'}
+  .row
+    .col
+      .form-group
+        %label{for: 'enabled'} Enabled
+        = f.check_box :enabled
+  .row
+    .col
+      .form-group
+        %label{for: 'user_id'} Representatives
+        = select_tag :user, options_from_collection_for_select(User.all, 'id', 'name', @affiliation.user.nil? ? nil : @affiliation.user.id), {include_blank: true, class: 'form-control'}
+  .row
+    .col
+      = f.submit 'Save Changes', class: 'btn btn-primary'

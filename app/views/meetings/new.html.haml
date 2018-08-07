@@ -1,0 +1,19 @@
+%h1 New Senate Meeting
+= form_for @meeting do |f|
+  .row
+    .col-md-12
+      .form-group
+        %label{for: 'name'} Meeting name
+        = f.text_field :name, placeholder: @meeting.real_name, class: 'form-control'
+      .form-group
+        %label{for: 'date'} Date of meeting
+        .d-flex.justify-content-between.asg-date-select
+          = f.date_select :date, {order: %i[month day year]}, {class: 'form-control'}
+      .form-group
+        %label{for: 'agenda'} Agenda link
+        = f.text_field :agenda, class: 'form-control'
+      .form-group
+        %label{for: 'minutes'} Minutes link
+        = f.text_field :minutes, class: 'form-control'
+      .form-group.d-flex.justify-content-end
+        = f.submit 'Create Meeting', class: 'btn btn-primary'

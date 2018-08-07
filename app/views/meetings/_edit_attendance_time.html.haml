@@ -1,0 +1,44 @@
+- if @meeting.attendance_records(time).empty?
+  %h5
+    The meeting has not
+    = time == 'begin' ? 'started' : time == 'end' ? 'ended' : ''
+    yet.
+- else
+  .table-responsive
+    = form_for @meeting, url: {controller: :meetings, action: :update_attendance, time: time} do |m|
+      %table.table
+        %tr
+          %th Seat
+          %th Status
+          - unless flash[:open]
+            %th Late
+          %th Sub
+          %th Sub Name and NetID
+        - @meeting.attendance_records(time).each do |attendance_record|
+          = m.fields_for 'attendance_record[]', attendance_record do |r|
+            %tr
+              %td= r.object.affiliation.name + " (" + r.object.affiliation.user.name + ")"
+              %td= r.select :status, options_for_select(AttendanceRecord.statuses.keys.map do |m| [m.capitalize, m] end, r.object.status), {include_blank: true}, {class: 'form-control form-control-sm'}
+              - unless flash[:open]
+                %td= r.check_box :late
+              - if time == 'begin'
+                %td= r.check_box :sub, id: "sub-checkbox-#{r.object.affiliation.id}", data: {affiliation: r.object.affiliation.id}
+                %td
+                  .input-group
+                    - if r.object.sub
+                      = r.text_field :who, class: 'form-control', placeholder: 'Sub Name', id: "sub-name-#{r.object.affiliation.id}"
+                      = r.text_field :netid, class: 'form-control', placeholder: 'Sub NetID', id: "sub-netid-#{r.object.affiliation.id}"
+                    - else
+                      = r.text_field :who, class: 'form-control', disabled: true, placeholder: 'Sub Name', id: "sub-name-#{r.object.affiliation.id}"
+                      = r.text_field :netid, class: 'form-control', disabled: true, placeholder: 'Sub NetID', id: "sub-netid-#{r.object.affiliation.id}"
+              - else
+                - if r.object.begin_was_sub?
+                  %td= r.check_box :sub, id: "sub-checkbox-#{r.object.affiliation.id}", data: {affiliation: r.object.affiliation.id}, disabled: true, checked: true
+                - else
+                  %td= r.check_box :sub, id: "sub-checkbox-#{r.object.affiliation.id}", data: {affiliation: r.object.affiliation.id}, disabled: true
+                %td
+                  .input-group
+                    = r.text_field :who, class: 'form-control', disabled: true, laceholder: 'Sub Name', id: "sub-name-#{r.object.affiliation.id}"
+                    = r.text_field :netid, class: 'form-control', disabled: true, placeholder: 'Sub NetID', id: "sub-netid-#{r.object.affiliation.id}"
+      .d-flex.justify-content-end
+        = m.submit 'Save Attendance', class: 'primary-button'

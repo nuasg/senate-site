@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  who: MyText
+  netid: MyText
+  when: 1
+  status: 1
+  sub: false
+  late: false
+
+two:
+  who: MyText
+  netid: MyText
+  when: 1
+  status: 1
+  sub: false
+  late: false

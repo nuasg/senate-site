@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  begin: 2018-06-01 00:20:45
+  end: 2018-06-01 00:20:45
+  name: MyText
+  agenda: MyText
+  minutes: MyText
+  date: 2018-06-01
+
+two:
+  begin: 2018-06-01 00:20:45
+  end: 2018-06-01 00:20:45
+  name: MyText
+  agenda: MyText
+  minutes: MyText
+  date: 2018-06-01

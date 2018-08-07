@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  voting: false
+  order: 1
+
+two:
+  voting: false
+  order: 1

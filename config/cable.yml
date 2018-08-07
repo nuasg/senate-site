@@ -1,0 +1,8 @@
+redis: &redis
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6380/1" } %>
+  channel_prefix: senate_production
+
+development: *redis
+test: *redis
+production: *redis

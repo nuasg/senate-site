@@ -1,0 +1,19 @@
+
+- if records.empty? && @meeting.begin.nil?
+  %h5 This meeting has not yet been opened.
+- else
+  .table-responsive
+    %table.table
+      %tr
+        %th Seat
+        %th Representative
+        %th Status
+      - records.each do |record|
+        %tr
+          %td= record.affiliation.name
+          %td= record.who + (record.sub ? " (Sub)" : "")
+          %td= record.humanize
+      - if records.empty?
+        %td{colspan: "3"} Something went wrong with attendance for this meeting.
+- if is_admin? && (@meeting.open? || @meeting.closed?)
+  %p.text-right= link_to 'Edit Attendance', {controller: :meetings, action: :attendance}

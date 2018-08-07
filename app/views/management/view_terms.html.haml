@@ -1,0 +1,19 @@
+%h1 Terms
+%div
+  .item-listing.add
+    = link_to(controller: :management, action: :new_term) do
+      %span.fas.fa-plus-circle
+      &nbsp;Add a Term
+%br
+%br
+- Term.all.order(begin: :desc).each do |term|
+  .item-listing
+    .title
+      %span= term.name
+    .middle
+      %span
+        = term.begin.strftime "%b %-d, %Y"
+        &nbsp->&nbsp;
+        = term.end.strftime "%b %-d, %Y"
+    .options
+      = context_menu 'term'
