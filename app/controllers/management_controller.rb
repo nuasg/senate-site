@@ -4,7 +4,7 @@ class ManagementController < ApplicationController
   end
 
   def view_terms
-    @terms = Term.all
+    @terms = Term.all.order(begin: :desc)
   end
 
   def new_term
