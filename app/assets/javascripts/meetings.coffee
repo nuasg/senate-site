@@ -1,10 +1,3 @@
-initMeetings = ->
-  x = document.querySelector "#term-select"
-
-  if x?
-    x.addEventListener "change", () ->
-      Turbolinks.visit(this.options[this.selectedIndex].dataset.url)
-
 initCheckboxes = ->
   x = document.querySelectorAll "input[data-affiliation]"
 
@@ -13,15 +6,14 @@ initCheckboxes = ->
       aff = this.dataset.affiliation
       id1 = "#sub-name-#{aff}"
       id2 = "#sub-netid-#{aff}"
-      document.querySelector(id1).removeAttribute "disabled" if this.checked
-      document.querySelector(id1).setAttribute("disabled","") unless this.checked
-      document.querySelector(id2).removeAttribute "disabled" if this.checked
-      document.querySelector(id2).setAttribute("disabled","") unless this.checked
+      document.querySelector(id1).removeAttribute "readonly" if this.checked
+      document.querySelector(id1).setAttribute("readonly","readonly") unless this.checked
+      document.querySelector(id2).removeAttribute "readonly" if this.checked
+      document.querySelector(id2).setAttribute("readonly","readonly") unless this.checked
 
   assign obj for obj in x
 
 initAll = ->
-  initMeetings()
   initCheckboxes()
 
 

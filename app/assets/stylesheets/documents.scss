@@ -1,3 +1,44 @@
 // Place all the styles related to the Documents controller here.
 // They will automatically be included in application.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'color';
+
+div.voting, div.voting:not([data-voting-enabled]) {
+  input[type="submit"], input[type="submit"][disabled], input[type="submit"][disabled]:hover {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 8px;
+    outline: none;
+
+    cursor: not-allowed;
+
+    transition: background-color 0.15s, color 0.15s;
+
+    background-color: $nu-purple-4;
+    color: $nu-purple-2;
+  }
+
+  display: flex;
+  justify-content: space-around;
+}
+
+div.voting[data-voting-enabled="true"], div.voting:not([data-voting-enabled]) {
+  input[type="submit"]:hover {
+    background-color: $nu-purple-3;
+  }
+
+  input[type="submit"] {
+    color: $nu-purple-5;
+    background-color: $nu-purple-1;
+    cursor: pointer;
+  }
+}
+
+div.voting[data-voting-enabled="false"] {
+  input[type="submit"], input[type="button"]:hover {
+    color: $nu-purple-3;
+    cursor: not-allowed;
+  }
+}

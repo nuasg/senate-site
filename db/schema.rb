@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_02_042003) do
+ActiveRecord::Schema.define(version: 2018_09_03_193208) do
 
   create_table "affiliation_types", force: :cascade do |t|
     t.boolean "enabled"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2018_08_02_042003) do
 
   create_table "affiliations", force: :cascade do |t|
     t.integer "affiliation_type_id"
-    t.boolean "enabled"
+    t.boolean "enabled", default: true
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -33,12 +33,13 @@ ActiveRecord::Schema.define(version: 2018_08_02_042003) do
     t.integer "meeting_id"
     t.text "who"
     t.text "netid"
-    t.integer "when"
     t.integer "status"
     t.boolean "sub"
     t.boolean "late"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "end_status"
+    t.index ["affiliation_id", "meeting_id"], name: "index_attendance_records_on_affiliation_id_and_meeting_id", unique: true
     t.index ["affiliation_id"], name: "index_attendance_records_on_affiliation_id"
     t.index ["meeting_id"], name: "index_attendance_records_on_meeting_id"
   end
@@ -64,7 +65,7 @@ ActiveRecord::Schema.define(version: 2018_08_02_042003) do
     t.integer "document_type_id"
     t.text "link"
     t.text "name"
-    t.boolean "voting_open"
+    t.boolean "voting_open", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["document_type_id"], name: "index_documents_on_document_type_id"
@@ -109,9 +110,10 @@ ActiveRecord::Schema.define(version: 2018_08_02_042003) do
   create_table "vote_records", force: :cascade do |t|
     t.integer "affiliation_id"
     t.integer "document_id"
-    t.integer "vote"
+    t.integer "vote", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["affiliation_id", "document_id"], name: "index_vote_records_on_affiliation_id_and_document_id", unique: true
     t.index ["affiliation_id"], name: "index_vote_records_on_affiliation_id"
     t.index ["document_id"], name: "index_vote_records_on_document_id"
   end

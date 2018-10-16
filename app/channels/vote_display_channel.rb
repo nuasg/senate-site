@@ -1,7 +1,7 @@
 class VoteDisplayChannel < ApplicationCable::Channel
   def subscribed
     # stream_from "some_channel"
-    stream_from "broadcast_votes"
+    stream_from 'broadcast_votes'
   end
 
   def unsubscribed

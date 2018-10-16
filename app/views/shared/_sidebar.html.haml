@@ -1,7 +1,7 @@
 %section#sidebar
-  = image_tag 'asg-notext', id: 'sidebar-logo'
+  = image_tag 'asg-notext.png', id: 'sidebar-logo'
   %section#profile
-    = image_tag 'user', id: 'profile-image'
-    %h4#profile-name= User.find(session[:user_id]).name
-    %h6#profile-affiliation= User.find(session[:user_id]).rep_name
+    = image_tag 'user.png', id: 'profile-image'
+    %h4#profile-name= @user.name
+    %h6#profile-affiliation= @user.rep_name
   = render partial: 'shared/nav'

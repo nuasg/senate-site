@@ -10,9 +10,12 @@ window.addEventListener "turbolinks:load", (e) ->
       runAlerts()
     ), 250
 
-runAlerts = ->
+window.runAlerts = ->
   if window["alertQueue"].length == 0
+    window.alertsRunning = false
     return
+
+  window.alertsRunning = true
 
   alert = window["alertQueue"].pop();
 
@@ -29,3 +32,14 @@ runAlerts = ->
     300
   ).bind(null, alert),
   10000
+
+window.newAlert = (x) ->
+  cont = document.createElement "div"
+  cont.classList.add "alert"
+  cont.textContent = x
+
+  document.body.appendChild(cont)
+
+  window.alertQueue.push cont
+
+  window.setTimeout(runAlerts, 250) unless window.alertsRunning == true

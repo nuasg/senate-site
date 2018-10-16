@@ -1,0 +1,25 @@
+- if @meeting.end.nil?
+  %h5
+    The meeting has not ended yet.
+- else
+  .table-responsive
+    = form_for @meeting, html: {class: 'senate-table-form'} do |m|
+      %table.table
+        %tr
+          %th Seat
+          %th Status
+          %th Sub
+          %th Sub Name and NetID
+        = m.fields_for :attendance_records, @meeting.attendance_records.where(status: :present) do |record|
+          %tr
+            %td
+              = record.object.affiliation_and_name
+              = record.hidden_field :id
+            %td= record.select :end_status, options_for_select(AttendanceRecord.end_statuses_for_select, record.object.end_status), {include_blank: true}
+            %td= check_box_tag nil, nil, record.object.sub, disabled: true
+            %td
+              .input-group
+                = text_field_tag nil, record.object.who, disabled: true, placeholder: 'Sub Name'
+                = text_field_tag nil, record.object.netid, disabled: true, placeholder: 'Sub NetID'
+      .text-right
+        = m.submit 'Save Attendance', class: 'button'

@@ -32,7 +32,7 @@ window.clickNavLink = (container, nav, navLink) ->
   disableContentPanes container
   disableNavLinks nav
 
-  contentPane = document.getElementById navLink.dataset.target
+  contentPane = document.querySelector "[data-name='#{navLink.dataset.target}']"
 
   navLink.classList.add "active"
   contentPane.classList.add "active"

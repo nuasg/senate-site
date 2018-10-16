@@ -3,13 +3,13 @@
     - if is_admin?
       %li= link_to 'Meetings', {controller: :meetings, action: :index}
       %li= link_to 'Documents', {controller: :documents, action: :index}
-      %li= link_to 'Terms', {controller: :management, action: :view_terms}
+      %li= link_to 'Terms', {controller: :terms, action: :index}
       %li.dropdown
         = link_to 'Users'
         %ul
           %li= link_to 'View Users', {controller: :users, action: :index}
           %li= link_to 'Add User', {controller: :users, action: :new}
-          %li= link_to 'View Roster', {controller: :management, action: :view_roster}
+          %li= link_to 'View Roster', {controller: :main, action: :roster}
       %li= link_to 'Affiliations', {controller: :affiliations, action: :index}
     - else
       %li= link_to 'Home', {controller: :meetings, action: :index}

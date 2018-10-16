@@ -4,17 +4,25 @@ class UsersController < ApplicationController
   end
 
   def update
-    Affiliation.find(user_params[:affiliation_id]).dissociate
-    User.find(params[:id]).update_attributes user_params
+    User.find(params[:id]).update_attributes user_attributes
+
     redirect_to action: :index
   end
 
   def new
     @user = User.new
+
+    render :form
   end
 
   def create
-    User.create(user_params)
+    user = User.new user_attributes
+
+    if user.save
+      flash[:alert] = "Created user \"#{user_attributes[:name]}\"."
+    else
+      flash[:alert] = 'Failed to create user.'
+    end
 
     redirect_to action: :index
   end
@@ -22,19 +30,28 @@ class UsersController < ApplicationController
   def destroy
     x = User.find(params[:id])
     name = x.name
+
+    if x.id == session[:user_id]
+      flash[:alert] = "You cannot delete yourself."
+
+      redirect_to action: :index and return
+    end
+
     x.destroy
 
-    flash[:notice] = "User #{name} successfully deleted."
+    flash[:alert] = "Deleted user \"#{name}\"."
 
     redirect_to action: :index
   end
 
   def edit
-    @user = User.find params[:id]
+    @user_edit = User.find params[:id]
+
+    render :form
   end
 
   private
-  def user_params
+  def user_attributes
     params.require(:user).permit(:name, :affiliation_id, :netid, :admin)
   end
 end
