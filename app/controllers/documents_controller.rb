@@ -1,4 +1,6 @@
 class DocumentsController < ApplicationController
+  before_action :require_admin, except: [:vote]
+
   def index
   end
 

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :current_user
+  before_action :current_user, :require_active_user
 
   # For logging into the site at all
   def require_active_user
@@ -20,15 +20,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # TODO: Add subs to this effectively
   def current_user
-    if session[:user_id]
-      @user = User.find_by id: session[:user_id]
-    elsif Meeting.open.nil?
-      @user = nil
-    else
-      # @user = find_sub(session[:netid])
-    end
+    @user = User.find_or_sub id: session[:user_id], netid: session[:netid]
   end
 
   protected

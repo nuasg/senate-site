@@ -1,9 +1,8 @@
 ##
 # This class represents a meeting of the Senate
 class MeetingsController < ApplicationController
-  before_action :require_active_user
   before_action :empty_meeting, only: :new
-  before_action :require_admin, only: %i[new create edit update]
+  before_action :require_admin, except: [:index, :show]
 
   def index
     @meetings = Meeting.all.order date: :desc
@@ -70,15 +69,13 @@ class MeetingsController < ApplicationController
   end
 
   def attendance
-    require_admin
-
     @meeting = Meeting.find params[:id]
 
     render 'meetings/edit_attendance'
   end
 
   def destroy
-    Meeting.find(params[:id]).destroy
+    Meeting.destroy params[:id]
 
     redirect_to action: :index
   end

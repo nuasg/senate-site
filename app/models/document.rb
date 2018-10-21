@@ -53,10 +53,10 @@ class Document < ApplicationRecord
 
   def votes
     [
-        ['no_vote', VoteRecord.where(document: self, vote: :no_vote).count],
-        ['aye', VoteRecord.where(document: self, vote: :aye).count],
-        ['nay', VoteRecord.where(document: self, vote: :nay).count],
-        ['abstain', VoteRecord.where(document: self, vote: :abstain).count]
+        ['no_vote', no_votes],
+        ['aye', ayes],
+        ['nay', nays],
+        ['abstain', abstains]
     ]
   end
 
@@ -83,21 +83,18 @@ class Document < ApplicationRecord
   end
 
   def authorized_voters
-    meeting = Meeting.open
-
-    return [] if meeting.nil?
-
-    User.joins "INNER JOIN attendance_records ON attendance_records.netid = users.netid AND attendance_records.status = #{AttendanceRecord.statuses['present']} AND attendance_records.meeting_id = #{meeting.id}"
+    authorized_netids.map { |netid| User.find_or_sub netid: netid }
   end
 
   def authorized_netids
-    authorized_voters.pluck(:netid)
+    voting_meeting.attendance_records.where(status: :present).pluck(:netid)
   end
 
   def voting_link
     DocumentLink.find_by(document: self, voting: true)
   end
 
+  #:@return [Meeting]
   def voting_meeting
     return voting_link.meeting unless voting_link.nil?
     nil
@@ -108,22 +105,22 @@ class Document < ApplicationRecord
   end
 
   def open_voting
-    raise 'Voting already open' unless Document.open.nil? || Document.open == self
-    raise 'No voting meeting linked' if self.voting_meeting.nil?
-    raise 'Voting meeting not open' unless Meeting.open == self.voting_meeting && self.voting_meeting.open?
+    raise 'Voting is already open.' unless Document.open.nil? || Document.open == self
+    raise 'No voting meeting linked.' if self.voting_meeting.nil?
+    raise 'Voting meeting not open.' unless Meeting.open == self.voting_meeting
 
     self.update_attribute :voting_open, true
 
     records = []
     authorized_voters.each do |voter|
-      records << VoteRecord.new(affiliation: voter.representing, vote: :no_vote, document: self) if VoteRecord.find_by(affiliation: voter.representing, document: self).nil?
+      if VoteRecord.find_by(affiliation: voter.representing, document: self).nil?
+        records << VoteRecord.new(affiliation: voter.representing, vote: :no_vote, document: self)
+      end
     end
 
     VoteRecord.transaction do
       records.each &:save
     end
-
-    ToggleVotingJob.perform_now self
   end
 
   def reset_votes
@@ -132,13 +129,11 @@ class Document < ApplicationRecord
   end
 
   def close_voting
-    self.update_attribute :voting_open, false
-
-    ToggleVotingJob.perform_now self
+    self.update_attribute :voting_open, false\
   end
 
   def self.open
-    Document.find_by(voting_open: true)
+    Document.find_by voting_open: true
   end
 
   private

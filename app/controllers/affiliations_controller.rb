@@ -1,4 +1,6 @@
 class AffiliationsController < ApplicationController
+  before_action :require_admin
+
   def index
     @affiliations = Affiliation.all
   end
@@ -10,10 +12,10 @@ class AffiliationsController < ApplicationController
   end
 
   def create
-    affiliation = Affiliation.create affiliation_attributes
+    affiliation = Affiliation.new affiliation_attributes
 
     message = 'Failed to create affiliation.'
-    message = "Created affiliation \"#{affiliation.name}\"." if affiliation.save
+    message = "Created affiliation." if affiliation.save
 
     show_message text: message, redirect: {action: :index}
   end
@@ -29,7 +31,7 @@ class AffiliationsController < ApplicationController
     affiliation = Affiliation.find params[:id]
 
     message = 'Failed to update affiliation.'
-    message = "Affiliation \"#{affiliation.name}\" updated successfully." if affiliation.update_attributes attrs
+    message = "Affiliation updated successfully." if affiliation.update_attributes attrs
 
     show_message text: message, redirect: {action: :index}
   end
@@ -43,6 +45,7 @@ class AffiliationsController < ApplicationController
 
   private
   def affiliation_attributes
+    # Allow to set what student represents this affiliation through a form
     if params[:user_id] && !params[:user_id].nil? && params[:user_id] != ""
       p = params.require('affiliation').permit :enabled, :name, :affiliation_type_id, :user
       p[:user] = User.find params[:user_id]

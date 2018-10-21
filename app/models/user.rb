@@ -4,19 +4,10 @@ class User < ApplicationRecord
   validates :name, :netid, presence: true
 
   before_save :downcase_netid
+  before_destroy :verify_not_logged
 
   def self.admin?(id)
     id && User.find(id).admin
-  end
-
-  def make_sub(name, netid)
-    u = User.find_by(netid: netid)
-
-    if u
-      u.update_attributes(name: name)
-    else
-      User.create(name: name, netid: netid)
-    end
   end
 
   def representing
@@ -37,18 +28,34 @@ class User < ApplicationRecord
     representing.nil? ? '' : representing.name
   end
 
-  def self.sub_exists(netid)
-    # TODO: Finish this
+  def self.find_or_sub(id: nil, netid: '')
+    if !id.nil?
+      user = User.find_by id: id
+    else
+      user = User.find_by netid: netid
+    end
+
+    return user unless user.nil?
+
+    return User.sub netid
+  end
+
+  def self.sub(netid)
+    return nil if netid == '' || netid.nil?
+
     meeting = Meeting.open
 
     return nil if meeting.nil?
+    return nil unless meeting.has_sub? netid
 
+    record = meeting.sub_record netid
 
+    User.new name: record.who, netid: record.netid, affiliation: record.affiliation, affiliation_id: record.affiliation_id
   end
 
   def self.authenticate(netid, password)
     if Rails.env.development?
-      user = User.find_by netid: netid.downcase
+      user = User.find_or_sub netid: netid.downcase
 
       if user.nil?
         return 'Your account has not yet been created. Please see the Speaker of the Senate.'
@@ -120,5 +127,9 @@ class User < ApplicationRecord
   private
   def downcase_netid
     netid.downcase!
+  end
+
+  def verify_not_logged
+    raise 'You cannot delete yourself.' if @user.id == self.id
   end
 end

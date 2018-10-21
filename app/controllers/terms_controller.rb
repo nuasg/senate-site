@@ -1,4 +1,6 @@
 class TermsController < ApplicationController
+  before_action :require_admin
+
   def index
     @terms = Term.all.order begin: :desc
   end

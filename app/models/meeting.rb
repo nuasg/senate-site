@@ -26,15 +26,16 @@ class Meeting < ApplicationRecord
   end
 
   def has_sub?(netid)
-    attendance_records.where(netid: netid).one?
+    attendance_records.where(netid: netid).any?
+  end
+
+  #@return [AttendanceRecord]
+  def sub_record(netid)
+    attendance_records.find_by netid: netid
   end
 
   def attendance_record_by_netid(netid)
     AttendanceRecord.find_by(meeting: self, netid: netid)
-  end
-
-  def attendance_record_by_affiliation(affiliation)
-    AttendanceRecord.find_by(meeting: self, when: :begin, affiliation: affiliation)
   end
 
   def open
@@ -82,6 +83,7 @@ class Meeting < ApplicationRecord
     self.update_attributes begin: nil, end: nil
   end
 
+  #@return [Meeting]
   def self.open
     Meeting.find_by('begin IS NOT NULL AND end IS NULL')
   end

@@ -1,4 +1,6 @@
 class MainController < ApplicationController
+  skip_before_action :require_active_user, only: [:login, :logout, :authenticate]
+
   def login
   end
 
