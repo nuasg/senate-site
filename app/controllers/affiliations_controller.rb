@@ -7,7 +7,6 @@ class AffiliationsController < ApplicationController
 
   def new
     @affiliation = Affiliation.new
-
     render :form
   end
 
