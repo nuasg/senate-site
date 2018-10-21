@@ -10,4 +10,13 @@ module MeetingsHelper
 
     options_for_select y, selected
   end
+
+  def meeting_context_menu(meeting)
+    content_tag :div, class: 'context-menu' do
+      content_tag :ul do
+        concat(content_tag :li, link_to('Edit', controller: :meetings, action: :edit, id: meeting.id))
+        concat(content_tag :li, link_to( 'Delete', {controller: :meetings, action: :destroy, id: meeting.id}, method: :delete, data: {confirm: 'Are you sure you want to delete this?'}))
+      end
+    end
+  end
 end

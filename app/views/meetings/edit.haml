@@ -1,0 +1,18 @@
+%h1 Edit Senate Meeting
+= form_for @meeting, html: {class: 'senate-form'} do |f|
+  %label{for: 'name'} Meeting name
+  = f.text_field :name, placeholder: 'Senate [Date]'
+  %label{for: 'date'} Date of meeting
+  .date-container
+    = f.date_select :date, {order: %i[month day year]}
+  %label{for: 'agenda'} Agenda link
+  = f.text_field :agenda
+  %label{for: 'minutes'} Minutes link
+  = f.text_field :minutes
+  %label{for: 'begin'} Meeting began
+  .time-container
+    = f.time_select :begin, {include_blank: true, ignore_date: true}
+  %label{for: 'end'} Meeting ended
+  .time-container
+    = f.time_select :end, {include_blank: true, ignore_date: true}
+  = f.submit 'Update'

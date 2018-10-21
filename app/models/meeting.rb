@@ -1,11 +1,13 @@
 class Meeting < ApplicationRecord
-  has_many :document_links
+  has_many :document_links, inverse_of: :meeting
   has_many :documents, through: :document_links
 
   has_many :attendance_records
   has_many :affiliations, through: :attendance_records
 
   accepts_nested_attributes_for :attendance_records
+
+  before_destroy :destroy_links
 
   def real_name
     if name && name != ''
@@ -14,21 +16,21 @@ class Meeting < ApplicationRecord
       if date
         "Senate #{date.strftime "%b %-d, %Y"}"
       else
-        "Senate [Date]"
+        'Senate [Date]'
       end
     end
   end
 
   def term
-    Term.find_by "begin < ? and end > ?", self.date, self.date
+    Term.find_by 'begin < ? and end > ?', self.date, self.date
   end
 
-  def attendance_records(time)
-    AttendanceRecord.where(meeting: self, when: time)
+  def has_sub?(netid)
+    attendance_records.where(netid: netid).one?
   end
 
   def attendance_record_by_netid(netid)
-    AttendanceRecord.find_by(meeting: self, when: :begin, netid: netid)
+    AttendanceRecord.find_by(meeting: self, netid: netid)
   end
 
   def attendance_record_by_affiliation(affiliation)
@@ -40,43 +42,26 @@ class Meeting < ApplicationRecord
       raise 'Meeting already open'
     end
 
-    self.begin = DateTime.now
-    save!
+    self.update! begin: DateTime.now
 
-    authorized = User.joins(:affiliation).where('Affiliations.enabled = ?', true)
+    authorized = Affiliation.where(enabled: true).pluck(:id)
 
-    attributes = {
-        affiliation: nil,
-        meeting: self,
-        when: :begin,
-        status: nil,
-        sub: nil,
-        late: nil,
-        who: nil,
-        netid: nil
-    }
+    records = []
+    authorized.each do |aff|
+      records << AttendanceRecord.new(meeting_id: self.id, affiliation_id: aff)
+    end
 
-    authorized.each do |user|
-      attributes[:affiliation] = user.affiliation
-
-      exist = AttendanceRecord.find_by(affiliation: user.affiliation, meeting: self, when: :begin)
-
-      if exist.nil?
-        AttendanceRecord.create(attributes)
-      end
+    AttendanceRecord.transaction do
+      records.each &:save
     end
   end
 
   def voting_documents
-    self.document_links.where(voting: true).map do |link|
-      link.document
-    end
+    Document.joins("INNER JOIN document_links ON document_links.document_id = documents.id AND document_links.meeting_id = #{self.id} AND document_links.voting = 1")
   end
 
   def nonvoting_documents
-    self.document_links.where(voting: false).map do |link|
-      link.document
-    end
+    Document.joins("INNER JOIN document_links ON document_links.document_id = documents.id AND document_links.meeting_id = #{self.id} AND document_links.voting = 0")
   end
 
   def open?
@@ -87,12 +72,14 @@ class Meeting < ApplicationRecord
     self.begin != nil && self.end != nil
   end
 
+  def unclose
+    self.update_attributes end: nil
+    AttendanceRecord.where(meeting_id: self.id).update_all end_status: nil
+  end
+
   def reset
-    self.attendance_records(:begin).each do |a| a.destroy end
-    self.attendance_records(:end).each do |a| a.destroy end
-    self.begin = nil
-    self.end = nil
-    save
+    AttendanceRecord.where(meeting_id: self.id).delete_all
+    self.update_attributes begin: nil, end: nil
   end
 
   def self.open
@@ -100,33 +87,11 @@ class Meeting < ApplicationRecord
   end
 
   def close
-    self.end = DateTime.now
-    save!
+    self.update! end: DateTime.now
+  end
 
-    authorized = User.joins(:affiliation).where('Affiliations.enabled = ?', true)
-
-    attributes = {
-        affiliation: nil,
-        meeting: self,
-        when: :end,
-        status: nil,
-        sub: nil,
-        late: nil,
-        who: nil,
-        netid: nil
-    }
-
-    authorized.each do |user|
-      attributes[:affiliation] = user.affiliation
-
-      exist = AttendanceRecord.find_by(affiliation: user.affiliation, meeting: self, when: :end)
-
-      if exist.nil?
-        x = AttendanceRecord.create(attributes)
-        start = x.get_begin
-
-        x.update(who: start.who, netid: start.netid, sub: x.sub)
-      end
-    end
+  private
+  def destroy_links
+    DocumentLink.where(meeting_id: self.id).delete_all
   end
 end

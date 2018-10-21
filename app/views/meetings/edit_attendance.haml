@@ -1,0 +1,10 @@
+= link_to '', {controller: :meetings, action: :show}, {class: 'fas fa-arrow-left return'}
+%h1 Meeting Attendance
+%ul.app-navigation{role: 'navigation', data: {target: 'a-content'}}
+  %li{data: {target: 'a-begin'}} Beginning
+  %li{data: {target: 'a-end'}} End
+.tab-content#a-content
+  .tab-sec{data: {name: 'a-begin'}}
+    = render partial: 'edit_attendance_begin'
+  .tab-sec{data: {name: 'a-end'}}
+    = render partial: 'edit_attendance_end'

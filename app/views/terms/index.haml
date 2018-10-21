@@ -1,0 +1,7 @@
+%h1 Terms
+.item-listing.add
+  = link_to(controller: :terms, action: :new) do
+    %span.fas.fa-plus-circle
+    &nbsp;Add a Term
+- @terms.each do |term|
+  = render_term term

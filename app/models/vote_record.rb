@@ -10,13 +10,15 @@ class VoteRecord < ApplicationRecord
   after_save :broadcast_vote
   before_destroy :remove_vote
 
+  validates :affiliation_id, uniqueness: {scope: :document_id}
+
   private
   def update_old_vote
-    self.old_vote = self.vote
+    self.old_vote = self.vote_was
   end
 
   def broadcast_vote
-    BroadcastVoteJob.perform_now self, old_vote
+    BroadcastVoteJob.perform_now self
   end
 
   def remove_vote

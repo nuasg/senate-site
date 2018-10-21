@@ -1,3 +1,26 @@
+$colors: (
+  asg-blue:        #00BCB4,
+  asg-purple:      #61259E,
+  asg-green:       #94D60A,
+  
+  nu-purple-1:     #401F68,
+  nu-purple-2:     #4E2A84,
+  nu-purple-3:     #836EAA,
+  nu-purple-4:     #B6ACD1,
+  nu-purple-5:     #E4E0EE,
+  
+  nu-black-1:      #342F2E,
+  nu-black-2:      #716C6B,
+  nu-black-3:      #BBB8B8,
+  nu-black-4:      #D8D6D6
+);
+
+:root {
+  @each $name, $value in $colors {
+    --#{$name}: #{$value};
+  }
+}
+
 $asg-blue:        #00BCB4;
 $asg-purple:      #61259E;
 $asg-green:       #94D60A;
@@ -12,20 +35,3 @@ $nu-black-1:      #342F2E;
 $nu-black-2:      #716C6B;
 $nu-black-3:      #BBB8B8;
 $nu-black-4:      #D8D6D6;
-
-:root {
-  --asg-blue:     #00BCB4;
-  --asg-purple:   #61259E;
-  --asg-green:    #94D60A;
-
-  --nu-purple-1:  #401F68;
-  --nu-purple-2:  #4E2A84;
-  --nu-purple-3:  #836EAA;
-  --nu-purple-4:  #B6ACD1;
-  --nu-purple-5:  #E4E0EE;
-
-  --nu-black-1:   #342F2E;
-  --nu-black-2:   #716C6B;
-  --nu-black-3:   #BBB8B8;
-  --nu-black-4:   #D8D6D6;
-}

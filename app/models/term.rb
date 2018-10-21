@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
-##
-# This class represents one term at Northwestern (e.g., Spring 2018)
 class Term < ApplicationRecord
+  validates :name, :begin, :end, presence: true
+
   def meetings
     Meeting.where('date >= ? AND date <= ?', self.begin, self.end).order(date: :desc)
   end
@@ -26,5 +24,13 @@ class Term < ApplicationRecord
                               quarter:      term.quarter) }
       ]
     end
+  end
+
+  def render
+
+  end
+
+  def context_menu
+
   end
 end

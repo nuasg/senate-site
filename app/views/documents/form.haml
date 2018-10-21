@@ -1,0 +1,13 @@
+%h1= @doc.new_record? ? 'New Document' : 'Edit Document'
+= form_for @doc, html: {class: 'senate-form'} do |f|
+  %label{for: 'name'} Document name
+  = f.text_field :name, required: true
+  %label{for: 'type'} Document type
+  = f.select :document_type_id, options_from_collection_for_select(DocumentType.all, 'id', 'name', @doc.new_record? ? nil : @doc.type.id)
+  %label{for: 'link'} Link
+  = f.text_field :link
+  %label{for: 'nonvoting_meeting_ids'} Meetings (Not Voting)
+  = f.select :nonvoting_meeting_ids, options_from_collection_for_select(Meeting.all.order(date: :desc), 'id', 'real_name', @doc.new_record? ? nil : @doc.nonvoting_meeting_ids), {}, {multiple: true}
+  %label{for: 'voting_meeting_ids'} Meeting (Voting)
+  = f.select :voting_meeting_ids, options_from_collection_for_select(Meeting.all.order(date: :desc), 'id', 'real_name', @doc.new_record? ? nil : @doc.voting_meeting_ids), {include_blank: true}
+  = f.submit @doc.new_record? ? 'Create' : 'Update'

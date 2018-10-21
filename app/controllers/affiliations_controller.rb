@@ -5,49 +5,50 @@ class AffiliationsController < ApplicationController
 
   def new
     @affiliation = Affiliation.new
+
+    render :form
   end
 
   def create
-    Affiliation.create(affiliation_params)
+    affiliation = Affiliation.create affiliation_attributes
 
-    redirect_to action: :index
+    message = 'Failed to create affiliation.'
+    message = "Created affiliation \"#{affiliation.name}\"." if affiliation.save
+
+    show_message text: message, redirect: {action: :index}
   end
 
   def edit
     @affiliation = Affiliation.find params[:id]
+
+    render :form
   end
 
   def update
-    @affiliation = Affiliation.find params[:id]
-    @affiliation.update_attributes! affiliation_params
+    attrs = affiliation_attributes
+    affiliation = Affiliation.find params[:id]
 
-    if params[:user].empty?
-      @affiliation.dissociate
-    else
-      nuser = User.find params[:user]
+    message = 'Failed to update affiliation.'
+    message = "Affiliation \"#{affiliation.name}\" updated successfully." if affiliation.update_attributes attrs
 
-      if @affiliation.user && @affiliation.user != nuser
-        @affiliation.dissociate
-      end
-
-      @affiliation.user = nuser
-    end
-
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   def destroy
-    affiliation = Affiliation.find(params[:id])
-    name = affiliation.name
-    affiliation.destroy
+    message = "Failed to delete affiliation."
+    message = "Affiliation deleted." if Affiliation.destroy params[:id]
 
-    flash[:notice] = "Affiliation \"#{name}\" successfully deleted."
-
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   private
-  def affiliation_params
-    params.require('affiliation').permit(:enabled, :name, :affiliation_type_id)
+  def affiliation_attributes
+    if params[:user_id] && !params[:user_id].nil? && params[:user_id] != ""
+      p = params.require('affiliation').permit :enabled, :name, :affiliation_type_id, :user
+      p[:user] = User.find params[:user_id]
+      return p
+    end
+
+    params.require('affiliation').permit :enabled, :name, :affiliation_type_id, :user
   end
 end

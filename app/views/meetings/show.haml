@@ -1,0 +1,26 @@
+%h1.meeting-name= @meeting.real_name
+%h5.meeting-desc= @meeting.description
+%ul.app-navigation{role: 'navigation', data: {target: 'm-content'}}
+  %li{data: {target: 'm-information'}} Information
+  %li{data: {target: 'm-documents'}} Documents
+  %li{data: {target: 'm-attendance'}} Attendance
+  - if is_admin?
+    %li{data: {target: 'm-controls'}} Controls
+.tab-content#m-content
+  .tab-sec{data: {name: 'm-information'}}
+    .meeting-info
+      .meeting-info-link
+        %a{href: @meeting.agenda, target: '_blank'}
+          %span.fas.fa-file-alt
+          %h5 Agenda
+      .meeting-info-link
+        %a{href: @meeting.minutes, target: '_blank'}
+          %span.fas.fa-book
+          %h5 Minutes
+  .tab-sec{data: {name: 'm-documents'}}
+    = render partial: 'documents', locals: {links: @meeting.document_links.order(voting: :desc).group_by(&:voting)}
+  .tab-sec{data: {name: 'm-attendance'}}
+    = render partial: 'attendance', locals: {records: @meeting.attendance_records}
+  - if is_admin?
+    .tab-sec{data: {name: 'm-controls'}}
+      = render partial: 'controls', locals: {meeting: @meeting}

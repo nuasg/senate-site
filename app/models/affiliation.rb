@@ -4,17 +4,19 @@ class Affiliation < ApplicationRecord
 
   accepts_nested_attributes_for :user
 
+  validates :name, presence: true
+
   def type
     affiliation_type
   end
 
   def enabled?
-    enabled && type.enabled
+    self.enabled && self.type.enabled
   end
 
   def dissociate
     User.where(affiliation: self).each do |u|
-      u.update(affiliation: nil)
+      u.update_attributes(affiliation: nil)
     end
   end
 

@@ -1,0 +1,22 @@
+%h1 Senate Meetings
+- if is_admin?
+  %div
+    .item-listing.add
+      = link_to(controller: :meetings, action: :new) do
+        %span.fas.fa-plus-circle
+        &nbsp;Add a Meeting
+- @meetings.group_by(&:term).each do |term, items|
+  %h3= term.nil? ? "No Associated Term" : term.name
+  %div
+    - items.each do |item|
+      .item-listing
+        .title
+          %span= link_to item.real_name, {controller: :meetings, action: :show, id: item.id}
+          %span= item.date.strftime '%b %-d, %Y'
+        .middle
+          - item.documents.each do |document|
+            %span= document.name
+        - if is_admin?
+          .options
+            = context_menu
+          = meeting_context_menu item

@@ -1,0 +1,43 @@
+@import 'color';
+
+div.context-menu {
+  background-color: #fff;
+  position: absolute;
+  right: 0.85em;
+  top: 0.85em;
+  z-index: 1000;
+  height: 0;
+  border: none;
+  padding: 0;
+  transition: height 0.15s, border-width 0.15s, padding 0.15s, box-shadow 0.15s;
+  overflow: hidden;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 5px 0;
+
+      a {
+        color: transparent;
+        transition: color 0.15s;
+      }
+    }
+  }
+}
+
+div.context-menu.open {
+  border: 1px solid $nu-black-3;
+  box-shadow: 1px 1px 12px 1px rgba(0, 0, 0, 0.24);
+  padding: 10px;
+
+  a {
+    color: $nu-black-2;
+  }
+}
+
+[data-toggle] {
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+}

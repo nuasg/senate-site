@@ -1,0 +1,13 @@
+%h1= @user_form.new_record? ? "New User" : "Edit User"
+= form_for @user_form, html: {class: 'senate-form'} do |f|
+  %label{for: 'name'} Full name
+  = f.text_field :name, required: true
+  %label{for: 'netid'} NetID
+  = f.text_field :netid, required: true
+  %label{for: 'affiliation_id'} Affiliation
+  = f.select :affiliation_id, options_from_collection_for_select(Affiliation.all, 'id', 'name', @user_form.affiliation_id), {include_blank: true}
+  %label{for: 'email'} Email
+  = f.text_field :email
+  %label{for: 'admin'} Admin
+  = f.check_box :admin
+  = f.submit @user_form.new_record? ? "Create" : "Update"

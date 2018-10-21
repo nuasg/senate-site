@@ -1,0 +1,11 @@
+%h1 Documents
+%div
+  .item-listing.add
+    = link_to(controller: :documents, action: :new) do
+      %span.fas.fa-plus-circle
+      &nbsp;Add a Document
+- Document.all.group_by(&:document_type).each do |type, docs|
+  %h3= type.name
+  %div
+    - docs.each do |doc|
+      = render_document(doc)

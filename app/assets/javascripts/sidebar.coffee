@@ -1,7 +1,9 @@
+# Activate dropdowns and sidebar animations
 window.addEventListener "turbolinks:load", ->
   dropdowns = document.querySelectorAll "nav li.dropdown > a"
 
   initDropdown = (e) ->
+    # Prevent page refresh
     e.removeAttribute "href"
 
     e.addEventListener "click", ->
@@ -9,50 +11,35 @@ window.addEventListener "turbolinks:load", ->
 
       ul = this.parentElement.querySelector "ul"
       if this.parentElement.classList.contains "open"
+        # Require height != auto for animations to work
         ul.style.height = ul.scrollHeight + "px"
       else
         ul.style.height = ""
 
   initDropdown dropdown for dropdown in dropdowns
 
+  # Find sidebar open button (appears on mobile)
   openSidebar = document.querySelector "#open-sidebar"
-  openSidebar.addEventListener "click", ->
-    sidebar = document.querySelector "section#sidebar"
-    shade = document.querySelector "div#shade"
+  if openSidebar
+    openSidebar.addEventListener "click", ->
+      sidebar = document.querySelector "section#sidebar"
+      shade = document.querySelector "div#shade"
 
-    sidebar.classList.toggle "open"
+      sidebar.classList.toggle "open"
 
-    if sidebar.classList.contains "open"
-      shade.classList.add "open"
-      document.body.classList.add "shade"
-    else
-      shade.classList.remove "open"
-      document.body.classList.remove "shade"
+      if sidebar.classList.contains "open"
+        shade.classList.add "open"
+        document.body.classList.add "shade"
+      else
+        shade.classList.remove "open"
+        document.body.classList.remove "shade"
 
+  # Setup screen shade
   shade = document.querySelector "div#shade"
-  shade.addEventListener "click", ->
-    sidebar = document.querySelector "section#sidebar"
+  if shade
+    shade.addEventListener "click", ->
+      sidebar = document.querySelector "section#sidebar"
 
-    sidebar.classList.remove "open"
-    this.classList.remove "open"
-    document.body.classList.remove "shade"
-
-  meetingNav = document.querySelector "ul.meeting-navigation"
-  if meetingNav
-    tabLinks = meetingNav.querySelectorAll "li"
-
-    tabLinkActivate = (e) ->
-      e.addEventListener "click", ->
-        tab = this
-
-        tab.classList.add "active"
-
-        tabs = tab.parentElement.querySelectorAll "li"
-
-        temp = (a, f) ->
-          if a != f
-            f.classList.remove "active"
-
-        temp this, tab for tab in tabs
-
-    tabLinkActivate tabLink for tabLink in tabLinks
+      sidebar.classList.remove "open"
+      this.classList.remove "open"
+      document.body.classList.remove "shade"

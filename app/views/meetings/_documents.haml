@@ -1,0 +1,12 @@
+.voting-section
+  %h4 Voting
+  - if @meeting.voting_documents.empty?
+    %h6 No documents of this type.
+  - @meeting.voting_documents.each do |doc|
+    = render_document doc, true
+.voting-section
+  %h4 Not Voting
+  -if @meeting.nonvoting_documents.empty?
+    %h6 No documents of this type.
+  - @meeting.nonvoting_documents.each do |doc|
+    = render_document doc, true

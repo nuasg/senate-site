@@ -1,8 +1,3 @@
-# frozen_string_literal: true
-
-# That line is here because Rubocop wouldn't stop yelling at me about it
-# I don't know what it does
-
 ##
 # This class represents a meeting of the Senate
 class MeetingsController < ApplicationController
@@ -22,22 +17,14 @@ class MeetingsController < ApplicationController
     redirect_to action: :show, id: meeting.id
   end
 
-  def edit; end
+  def edit
+    @meeting = Meeting.find(params[:id])
+  end
 
   def update
-    meeting = Meeting.find params[:id]
+    Meeting.find(params[:id]).update_attributes! meeting_params
 
-    meeting.update_attributes(meeting_params)
-
-    if params[:meeting]['begin(4i)'].blank? || params[:meeting]['begin(5i)'].blank?
-
-    end
-
-    if params[:meeting]['end(5i)'].blank? || params[:meeting]['end(5i)'].blank?
-
-    end
-
-    redirect_to action: :show, id: meeting.id
+    redirect_to action: :show
   end
 
   def show
@@ -50,8 +37,8 @@ class MeetingsController < ApplicationController
     begin
       meeting.open
     rescue
-      flash[:alert] = "There is already a meeting open. Close that one before opening this one."
-      redirect_to controller: :meetings, action: :show, id: meeting.id and return
+      flash[:alert] = 'There is already a meeting open or something else went wrong.'
+      redirect_to controller: :meetings, action: :show and return
     end
 
     flash[:open] = true
@@ -68,6 +55,20 @@ class MeetingsController < ApplicationController
     redirect_to action: :attendance, anchor: 'a-end'
   end
 
+  def unclose
+    meeting = Meeting.find params[:id]
+    meeting.unclose
+
+    redirect_to action: :show, anchor: 'm-controls'
+  end
+
+  def reset
+    meeting = Meeting.find params[:id]
+    meeting.reset
+
+    redirect_to action: :show, anchor: 'm-controls'
+  end
+
   def attendance
     require_admin
 
@@ -76,31 +77,18 @@ class MeetingsController < ApplicationController
     render 'meetings/edit_attendance'
   end
 
-  def update_attendance
-    params[:meeting][:attendance_record].each do |id, data|
-      record = AttendanceRecord.find(id)
+  def destroy
+    Meeting.find(params[:id]).destroy
 
-      data[:who] ||= record.affiliation.user.name
-      data[:netid] ||= record.affiliation.user.netid
-      data[:late] = false if data[:late].nil?
-
-      record.update_attributes(attendance_record_params(data))
-    end
-
-    redirect_to action: :show
+    redirect_to action: :index
   end
 
+  private
   def empty_meeting
     @meeting = Meeting.new
   end
 
-  private
-
   def meeting_params
-    params.require(:meeting).permit(:agenda, :minutes, :name, :date, :begin, :end)
-  end
-
-  def attendance_record_params(pms)
-    pms.permit(:who, :netid, :status, :sub, :late)
+    params.require(:meeting).permit(:agenda, :minutes, :name, :date, :begin, :end, attendance_records_attributes: [:id, :who, :netid, :status, :sub, :late, :end_status])
   end
 end

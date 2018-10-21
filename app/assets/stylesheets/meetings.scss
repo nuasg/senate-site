@@ -1,3 +1,35 @@
 // Place all the styles related to the Meetings controller here.
 // They will automatically be included in application.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'color';
+
+.meeting-info {
+  display: flex;
+  justify-content: space-around;
+
+  .meeting-info-link {
+    text-align: center;
+    padding: 10px;
+
+    .fas {
+      font-size: 4em;
+      color: $asg-blue;
+    }
+
+    a {
+      color: $nu-black-1;
+      text-decoration: none;
+    }
+
+    h5 {
+    }
+  }
+}
+
+div.voting-section {
+  margin-bottom: 1.5em;
+
+  h6 {
+    color: $nu-black-2;
+  }
+}

@@ -1,6 +1,10 @@
 module ApplicationHelper
   def is_admin?
-    session[:user_id] && User.find(session[:user_id]).admin
+    @user.admin
+  end
+
+  def logged_in?
+    !@user.nil?
   end
 
   def edit_icon
@@ -11,7 +15,7 @@ module ApplicationHelper
     content_tag('span', nil, class: 'fas fa-trash')
   end
 
-  def context_menu(type)
-    content_tag 'span', nil, class: 'fas fa-ellipsis-v', data: {toggle: 'menu', type: type}
+  def context_menu
+    content_tag 'span', nil, class: 'fas fa-ellipsis-v', data: {toggle: 'menu'}
   end
 end

@@ -1,0 +1,126 @@
+@import 'color';
+
+form.senate-form {
+  label {
+    display: inline-block;
+    margin-bottom: 0.2em;
+  }
+
+  input[type="checkbox"] ~ label {
+    display: block;
+  }
+
+  input, select {
+    margin-bottom: 0.75em;
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid $nu-black-3;
+  }
+
+  select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid $nu-black-3;
+  }
+
+  select[multiple] {
+    overflow-y: auto;
+  }
+
+  input[type="button"], input[type="submit"] {
+    display: block;
+    box-sizing: border-box;
+
+    padding: 10px;
+    border-radius: 8px;
+
+    border: 1px solid $nu-purple-1;
+    background-color: $nu-purple-2;
+
+    font-weight: 600;
+    font-size: 1em;
+
+    color: $nu-black-4;
+
+    outline: none;
+
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  input[type="button"]:hover, input[type="submit"]:hover {
+    outline: none;
+    background-color: $nu-purple-3;
+    border-color: $nu-purple-2;
+  }
+
+  .date-container {
+    display: flex;
+  }
+
+  .time-container input, .time-container select {
+    width: auto;
+  }
+}
+
+button.button[disabled], a.button[disabled], input[type="button"][disabled].button, input[type="submit"][disabled].button,
+button.button[disabled]:hover, a.button[disabled]:hover, input[type="button"][disabled].button:hover, input[type="submit"][disabled].button:hover {
+  background-color: $nu-black-2;
+  color: $nu-black-1;
+  border-color: $nu-black-2;
+}
+
+button.button, a.button, input[type="button"].button, input[type="submit"].button {
+  display: inline-block;
+
+  box-sizing: border-box;
+
+  padding: 10px;
+  border-radius: 4px;
+
+  border: 1px solid $nu-purple-1;
+  background-color: $nu-purple-2;
+
+  font-weight: 600;
+  font-size: 1em;
+
+  color: #eee;
+
+  outline: none;
+
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+button.button:hover, a.button:hover, input[type="button"].button:hover, input[type="submit"].button:hover {
+  outline: none;
+  background-color: $nu-purple-3;
+  border-color: $nu-purple-3;
+
+  color: #eee;
+}
+
+form.senate-table-form {
+  input[type="text"], input[type="email"], input[type="password"] {
+    border: 1px solid $nu-black-2;
+    padding: 3px;
+  }
+
+  input[type="text"]:not(:last-of-type), input[type="email"]:not(:last-of-type), input[type="password"]:not(:last-of-type) {
+    margin-bottom: 0.2em;
+  }
+
+  input[type="text"][readonly], input[type="email"][readonly], input[type="password"][readonly] {
+    background-color: $nu-black-3;
+    color: $nu-black-2;
+  }
+
+  table {
+    margin-bottom: 0.75em;
+  }
+}

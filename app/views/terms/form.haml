@@ -1,0 +1,11 @@
+%h1= @term.new_record? ? "New Term" : "Edit Term"
+= form_for @term, html: {class: 'senate-form'} do |f|
+  %label{for: 'name'} Name
+  = f.text_field :name, required: true
+  %label{for: 'begin'} Start Date
+  .date-container
+    = f.date_select :begin, {order: %i[month day year]}
+  %label{for: 'end'} End Date
+  .date-container
+    = f.date_select :end, {order: %i[month day year]}
+  = f.submit (@term.new_record? ? "Create" : "Update")

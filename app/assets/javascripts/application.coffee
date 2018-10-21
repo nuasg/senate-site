@@ -1,23 +1,16 @@
-# This is a manifest file that'll be compiled into application.js, which will include all the files
-# listed below.
-#
-# Any JavaScript/Coffee file within this directory, lib/assets/javascripts, or any plugin's
-# vendor/assets/javascripts directory can be referenced here using a relative path.
-#
-# It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-# compiled file. JavaScript code in this file should be added after the last require_* statement.
-#
-# Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
-# about supported directives.
-#
 #= require jquery3
 #= require popper
 #= require rails-ujs
 #= require activestorage
 #= require turbolinks
+#= require cable
 #= require_tree .
 
+# Deletes all elements that wouldn't show up on a page refresh so that
+# Turbolinks doesn't show them if the user re-visits this page
 $(document).on "turbolinks:before-cache", ->
+  # Currently, the only elements are .alerts, and they can be specified to stay by adding the
+  # .persist class
   arr = document.querySelectorAll(".alert:not(.persist)")
 
   kill = (el) ->
@@ -25,6 +18,14 @@ $(document).on "turbolinks:before-cache", ->
 
   kill el for el in arr
 
+  menus = document.querySelectorAll ".context-menu.open"
+
+  close = (menu) ->
+    menu.style.height = "0"
+    menu.classList.remove "open"
+
+  # If any navigation tabs exist, navigate to the first one, because otherwise
+  # it will "jump" from the last tab to the first tab if the user navigates back to this page.
   firsts = document.querySelectorAll "ul.app-navigation li:first-child"
 
   window.clickNavLink(document.getElementById(li.parentElement.dataset.target), li.parentElement, li) for li in firsts
