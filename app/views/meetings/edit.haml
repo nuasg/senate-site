@@ -9,6 +9,8 @@
   = f.text_field :agenda
   %label{for: 'minutes'} Minutes link
   = f.text_field :minutes
+  %label{for: 'embed'} Embed Code
+  = f.text_area :embed
   %label{for: 'begin'} Meeting began
   .time-container
     = f.time_select :begin, {include_blank: true, ignore_date: true}

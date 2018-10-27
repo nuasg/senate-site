@@ -17,6 +17,9 @@
         %a{href: @meeting.minutes, target: '_blank'}
           %span.fas.fa-book
           %h5 Minutes
+    - unless @meeting.embed.nil?
+      %div= sanitize @meeting.embed, tags: %w(iframe)
+
   .tab-sec{data: {name: 'm-documents'}}
     = render partial: 'documents', locals: {links: @meeting.document_links.order(voting: :desc).group_by(&:voting)}
   .tab-sec{data: {name: 'm-attendance'}}

@@ -3,6 +3,17 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import 'color';
 
+iframe {
+  width: 100%;
+  min-height: 825px;
+  max-height: 100vh;
+  border: 1px solid #ccc;
+}
+
+textarea#meeting_embed {
+  height: 75px;
+}
+
 .meeting-info {
   display: flex;
   justify-content: space-around;
