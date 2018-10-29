@@ -3,7 +3,6 @@
 one:
   who: MyText
   netid: MyText
-  when: 1
   status: 1
   sub: false
   late: false
@@ -11,7 +10,6 @@ one:
 two:
   who: MyText
   netid: MyText
-  when: 1
   status: 1
   sub: false
   late: false
