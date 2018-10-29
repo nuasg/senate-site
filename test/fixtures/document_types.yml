@@ -2,8 +2,6 @@
 
 one:
   name: MyText
-  votable: false
 
 two:
   name: MyText
-  votable: false
