@@ -23,6 +23,17 @@ form.senate-form {
     border: 1px solid $nu-black-3;
   }
 
+  textarea {
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid $nu-black-3;
+    width: 100%;
+    display: block;
+    margin-bottom: 0.75em;
+    box-sizing: border-box;
+    outline: none;
+  }
+
   select {
     width: 100%;
     padding: 10px;

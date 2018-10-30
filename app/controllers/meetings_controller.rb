@@ -21,7 +21,7 @@ class MeetingsController < ApplicationController
   end
 
   def update
-    Meeting.find(params[:id]).update_attributes! meeting_params
+    Meeting.find(params[:id]).update_attributes meeting_params
 
     redirect_to action: :show
   end
@@ -86,6 +86,6 @@ class MeetingsController < ApplicationController
   end
 
   def meeting_params
-    params.require(:meeting).permit(:agenda, :minutes, :name, :date, :begin, :end, attendance_records_attributes: [:id, :who, :netid, :status, :sub, :late, :end_status])
+    params.require(:meeting).permit(:agenda, :minutes, :name, :date, :begin, :end, :embed, attendance_records_attributes: [:id, :who, :netid, :status, :sub, :late, :end_status])
   end
 end

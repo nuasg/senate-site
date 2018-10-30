@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_20_180759) do
+ActiveRecord::Schema.define(version: 2018_10_25_031846) do
 
   create_table "affiliation_types", force: :cascade do |t|
     t.boolean "enabled"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 2018_10_20_180759) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
+    t.text "embed"
   end
 
   create_table "settings", force: :cascade do |t|
