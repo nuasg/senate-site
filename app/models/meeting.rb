@@ -49,7 +49,7 @@ class Meeting < ApplicationRecord
       raise 'Meeting already open'
     end
 
-    self.update! begin: DateTime.now
+    self.update_attributes begin: DateTime.now
 
     authorized = Affiliation.where(enabled: true).pluck(:id)
 
@@ -79,7 +79,7 @@ class Meeting < ApplicationRecord
     self.begin != nil && self.end != nil
   end
 
-  def unclose
+  def reopen
     self.update_attributes end: nil
     AttendanceRecord.where(meeting_id: self.id).update_all end_status: nil
   end

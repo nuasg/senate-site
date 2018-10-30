@@ -26,11 +26,10 @@ class AffiliationsController < ApplicationController
   end
 
   def update
-    attrs = affiliation_attributes
     affiliation = Affiliation.find params[:id]
 
     message = 'Failed to update affiliation.'
-    message = "Affiliation updated successfully." if affiliation.update_attributes attrs
+    message = "Affiliation updated successfully." if affiliation.update_attributes affiliation_attributes
 
     show_message text: message, redirect: {action: :index}
   end

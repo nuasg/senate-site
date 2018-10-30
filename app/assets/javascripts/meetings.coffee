@@ -4,7 +4,7 @@ initCheckboxes = ->
   # Require that a sub be set if sub is checked for an affiliation
   assign = (obj) ->
     obj.addEventListener "change", ->
-      aff = this.dataset.affiliation
+      aff = this.dataset['affiliation']
       id1 = "#sub-name-#{aff}"
       id2 = "#sub-netid-#{aff}"
       document.querySelector(id1).removeAttribute "readonly" if this.checked

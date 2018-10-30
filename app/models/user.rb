@@ -24,7 +24,7 @@ class User < ApplicationRecord
   end
 
   def self.admin?(id)
-    id && User.find(id).admin
+    User.find_by(id: id)&.admin
   end
 
   def representing
@@ -46,14 +46,9 @@ class User < ApplicationRecord
   end
 
   def self.find_or_sub(id: nil, netid: '')
-    if !id.nil?
-      user = User.find_by id: id
-    else
-      user = User.find_by netid: netid
-    end
+    user = User.where('id = ? OR netid = ?', id, netid).first
 
     return user unless user.nil?
-
     return User.sub netid
   end
 
@@ -62,10 +57,8 @@ class User < ApplicationRecord
 
     meeting = Meeting.open
 
-    return nil if meeting.nil?
-    return nil unless meeting.has_sub? netid
-
-    record = meeting.sub_record netid
+    record = meeting&.sub_record netid
+    return nil if record.nil?
 
     User.new name: record.who, netid: record.netid, affiliation: record.affiliation, affiliation_id: record.affiliation_id
   end

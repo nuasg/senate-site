@@ -24,6 +24,8 @@ $(document).on "turbolinks:before-cache", ->
     menu.style.height = "0"
     menu.classList.remove "open"
 
+  close menu for menu in menus
+
   # If any navigation tabs exist, navigate to the first one, because otherwise
   # it will "jump" from the last tab to the first tab if the user navigates back to this page.
   firsts = document.querySelectorAll "ul.app-navigation li:first-child"

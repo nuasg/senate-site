@@ -9,8 +9,8 @@ class AttendanceRecord < ApplicationRecord
   validates :affiliation_id, uniqueness: {scope: :meeting_id}
 
   def affiliation_and_name
-    if affiliation.user.nil?
-      affiliation.name
+    if self.affiliation&.user.nil?
+      self.affiliation&.name
     else
       "#{affiliation.name} (#{affiliation.user.name})"
     end

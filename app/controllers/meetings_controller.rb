@@ -11,19 +11,25 @@ class MeetingsController < ApplicationController
   def new; end
 
   def create
-    meeting = Meeting.create(meeting_params)
+    meeting = Meeting.new meeting_params
 
-    redirect_to action: :show, id: meeting.id
+    message = 'Failed to create meeting.'
+    message = 'Created meeting.' if meeting.save
+
+    show_message text: message, redirect: {action: :index}
   end
 
   def edit
-    @meeting = Meeting.find(params[:id])
+    @meeting = Meeting.find params[:id]
   end
 
   def update
-    Meeting.find(params[:id]).update_attributes meeting_params
+    meeting = Meeting.find params[:id]
 
-    redirect_to action: :show
+    message = 'Failed to update meeting.'
+    message = 'Updated meeting.' if meeting.update_attributes meeting_params
+
+    show_message text: message, redirect: {action: :show}
   end
 
   def show
@@ -33,39 +39,41 @@ class MeetingsController < ApplicationController
   def open
     meeting = Meeting.find params[:id]
 
-    begin
-      meeting.open
-    rescue
-      flash[:alert] = 'There is already a meeting open or something else went wrong.'
-      redirect_to controller: :meetings, action: :show and return
-    end
+    message = 'Failed to open meeting.'
+    message = 'Meeting opened.' if meeting.open
 
     flash[:open] = true
 
-    redirect_to action: :attendance, anchor: 'a-begin'
+    show_message text: message, redirect: {action: :attendance, anchor: 'a-begin'}
   end
 
   def close
     meeting = Meeting.find params[:id]
-    meeting.close
+
+    message = 'Failed to close meeting.'
+    message = 'Meeting closed.' if meeting.close
 
     flash[:open] = true
 
-    redirect_to action: :attendance, anchor: 'a-end'
+    show_message text: message, redirect: {action: :attendance, anchor: 'a-end'}
   end
 
-  def unclose
+  def reopen
     meeting = Meeting.find params[:id]
-    meeting.unclose
 
-    redirect_to action: :show, anchor: 'm-controls'
+    message = 'Failed to reopen meeting.'
+    message = 'Meeting reopened.' if meeting.reopen
+
+    show_message text: message, redirect: {action: :show, anchor: 'm-controls'}
   end
 
   def reset
     meeting = Meeting.find params[:id]
-    meeting.reset
 
-    redirect_to action: :show, anchor: 'm-controls'
+    message = 'Failed to reset meeting.'
+    message = 'Meeting reset.' if meeting.reset
+
+    show_message text: message, redirect: {action: :show, anchor: 'm-controls'}
   end
 
   def attendance
@@ -75,9 +83,10 @@ class MeetingsController < ApplicationController
   end
 
   def destroy
-    Meeting.destroy params[:id]
+    message = 'Failed to destroy meeting.'
+    message = 'Meeting destroyed.' if Meeting.destroy params[:id]
 
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   private
@@ -86,6 +95,19 @@ class MeetingsController < ApplicationController
   end
 
   def meeting_params
-    params.require(:meeting).permit(:agenda, :minutes, :name, :date, :begin, :end, :embed, attendance_records_attributes: [:id, :who, :netid, :status, :sub, :late, :end_status])
+    params.require(:meeting).permit(:agenda,
+                                    :minutes,
+                                    :name,
+                                    :date,
+                                    :begin,
+                                    :end,
+                                    :embed,
+                                    attendance_records_attributes: [:id,
+                                                                    :who,
+                                                                    :netid,
+                                                                    :status,
+                                                                    :sub,
+                                                                    :late,
+                                                                    :end_status])
   end
 end

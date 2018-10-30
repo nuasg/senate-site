@@ -9,7 +9,7 @@
         %th Status
       - records.each do |record|
         %tr
-          %td= record.affiliation.name
+          %td= record.affiliation&.name
           %td= record_who record
           %td= record.humanize
       - if records.empty?
