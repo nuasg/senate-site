@@ -1,0 +1,13 @@
+.item-listing
+  .title
+    %span= term.name
+  .middle
+    %span
+      = term_begin term
+      %span.fas.fa-arrow-right
+      = term_end term
+  = render partial: 'shared/context_button'
+  .context-menu
+    %ul
+      %li= term_edit_link term
+      %li= term_delete_link term

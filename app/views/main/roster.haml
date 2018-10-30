@@ -7,8 +7,8 @@
       %th Seat Type
       %th Affiliation Name
       %th Representative
-    - @affiliations.each do |a|
+    - @affiliations.each do |affiliation|
       %tr
-        %td= a.type.name
-        %td= a.name
-        %td= a.user.nil? ? content_tag(:span, 'None', class: 'text-muted') : a.user.name
+        %td= affiliation.type.name
+        %td= affiliation.name
+        %td= affiliation_user affiliation

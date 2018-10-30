@@ -6,6 +6,23 @@ class User < ApplicationRecord
   before_save :downcase_netid
   before_destroy :verify_not_logged
 
+  #@param [Document] document
+  def can_vote_now?(document)
+    voting_meeting = document.voting_meeting
+
+    has_voting_meeting = voting_meeting.nil?
+    voting_meeting_open = voting_meeting.open?
+    present_at_meeting = voting_meeting.netid_present? self.netid
+    not_admin = !self.admin
+    voting_open = document.voting_open
+
+    has_voting_meeting &&
+        voting_meeting_open &&
+        present_at_meeting &&
+        not_admin &&
+        voting_open
+  end
+
   def self.admin?(id)
     id && User.find(id).admin
   end
