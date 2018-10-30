@@ -21,19 +21,6 @@ class Document < ApplicationRecord
     document_type
   end
 
-  def type=(val)
-    self.document_type = val
-  end
-
-  def user_can_vote?(user)
-    return false if voting_meeting.nil?
-    AttendanceRecord.where(meeting_id: voting_meeting.id, netid: user.netid).count != 0
-  end
-
-  def user_voted?(user)
-    VoteRecord.where('document_id = ? AND affiliation_id = ? AND vote != 0', self.id, user.affiliation_id).count != 0
-  end
-
   def user_vote(user)
     return nil if user.affiliation_id.nil?
     VoteRecord.find_by(document_id: self.id, affiliation_id: user.affiliation_id)
@@ -41,14 +28,13 @@ class Document < ApplicationRecord
 
   def vote(affiliation, vote)
     raise 'Voting not open.' unless self.voting_open && self.voting_meeting.open?
+    raise 'Not authorized to vote.' unless @user.can_vote_now?(self)
 
     existing = VoteRecord.find_by(affiliation_id: affiliation.id, document_id: self.id)
 
-    if existing.nil?
-      VoteRecord.create affiliation_id: affiliation.id, vote: vote, document_id: self.id
-    else
-      existing.update_attributes vote: vote
-    end
+    existing.update_attributes vote: vote and return unless existing.nil?
+
+    VoteRecord.create affiliation_id: affiliation.id, vote: vote, document_id: self.id
   end
 
   def votes
@@ -98,10 +84,6 @@ class Document < ApplicationRecord
   def voting_meeting
     return voting_link.meeting unless voting_link.nil?
     nil
-  end
-
-  def can_open_voting?
-    Document.open.nil? && !self.voting_meeting.nil? && self.voting_meeting.open? && !self.voting_open?
   end
 
   def open_voting

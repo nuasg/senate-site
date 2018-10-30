@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   post '/meetings/:id/open', controller: :meetings, action: :open
   post '/meetings/:id/close', controller: :meetings, action: :close
-  post '/meetings/:id/unclose', controller: :meetings, action: :unclose
+  post '/meetings/:id/reopen', controller: :meetings, action: :reopen
   post '/meetings/:id/reset', controller: :meetings, action: :reset
   get '/meetings/:id/attendance', controller: :meetings, action: :attendance
   get '/meetings/:year/:quarter', controller: :meetings, action: :index

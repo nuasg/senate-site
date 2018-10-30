@@ -13,10 +13,9 @@ class MainController < ApplicationController
   def logout
     reset_session
     cookies.delete :user_id
+    cookies.delete :netid
 
-    flash[:alert] = 'Logged out.'
-
-    redirect_to controller: 'main', action: 'login'
+    show_message text: 'Logged out.', redirect: {controller: :main, action: :login}
   end
 
   def display

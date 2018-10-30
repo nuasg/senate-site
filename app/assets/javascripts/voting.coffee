@@ -6,7 +6,7 @@ window.addEventListener(
       (e) ->
         console.log e.detail
         if e.detail[0].result == 'success'
-          $("div[data-document-id='#{e.detail[0].document_id}'] .middle").replaceWith(e.detail[0].new_content)
+          $("div[data-document-id='#{e.detail[0]['document_id']}'] .middle").replaceWith(e.detail[0]['new_content'])
           newAlert 'Your vote has been cast.'
         else
           newAlert e.detail[0].message

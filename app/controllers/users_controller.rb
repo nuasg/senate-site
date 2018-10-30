@@ -6,9 +6,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    User.find(params[:id]).update_attributes user_attributes
+    user = User.find params[:id]
 
-    redirect_to action: :index
+    message = 'Failed to update user.'
+    message = 'Updated user.' if user.update_attributes user_attributes
+
+    show_message text: message, redirect: {action: :index}
   end
 
   def new
@@ -20,30 +23,17 @@ class UsersController < ApplicationController
   def create
     user = User.new user_attributes
 
-    if user.save
-      flash[:alert] = "Created user \"#{user_attributes[:name]}\"."
-    else
-      flash[:alert] = 'Failed to create user.'
-    end
+    message = 'Failed to create user.'
+    message = 'Created user.' if user.save
 
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   def destroy
-    x = User.find(params[:id])
-    name = x.name
+    message = 'Failed to delete user.'
+    message = 'Deleted user.' if User.destroy params[:id]
 
-    if x.id == session[:user_id]
-      flash[:alert] = "You cannot delete yourself."
-
-      redirect_to action: :index and return
-    end
-
-    x.destroy
-
-    flash[:alert] = "Deleted user \"#{name}\"."
-
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   def edit

@@ -1,7 +1,7 @@
 window["alertQueue"] = []
 
 # Find alerts in the DOM and activate them after a slight delay to allow the page to settle
-window.addEventListener "turbolinks:load", (e) ->
+window.addEventListener "turbolinks:load", () ->
   window.setTimeout ( ->
     alerts = document.querySelectorAll ".alert:not(.test)"
 

@@ -6,18 +6,18 @@ class DocumentsController < ApplicationController
   end
 
   def new
-    @doc = Document.new
+    @document = Document.new
 
     render :form
   end
 
   def open_voting
-    doc = Document.find params[:id]
+    document = Document.find params[:id]
 
-    doc.open_voting
+    document.open_voting
 
-    redirect = {controller: :meetings, action: :show, id: doc.voting_meeting.id, anchor: 'm-documents'}
-    show_message text: "Opened voting for #{doc.name}.", redirect: redirect
+    redirect = {controller: :meetings, action: :show, id: document.voting_meeting.id, anchor: 'm-documents'}
+    show_message text: "Opened voting.", redirect: redirect
   end
 
   def reset
@@ -26,8 +26,7 @@ class DocumentsController < ApplicationController
     doc.reset_votes
 
     redirect = {controller: :meetings, action: :show, id: doc.voting_meeting.id, anchor: 'm-documents'}
-
-    show_message text: "Voting reset for #{doc.name}.", redirect: redirect
+    show_message text: "Voting reset.", redirect: redirect
   end
 
   def close_voting
@@ -36,8 +35,7 @@ class DocumentsController < ApplicationController
     doc.close_voting
 
     redirect = {controller: :meetings, action: :show, id: doc.voting_meeting.id, anchor: 'm-documents'}
-
-    show_message text: "Voting closed for #{doc.name}.", redirect: redirect
+    show_message text: "Voting closed.", redirect: redirect
   end
 
   def open_secret
@@ -46,13 +44,16 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    Document.create document_attributes
+    document = Document.new document_attributes
 
-    show_message text: 'Document created.', redirect: {action: :index}
+    message = 'Failed to create document.'
+    message = 'Document created.' if document.save
+
+    show_message text: message, redirect: {action: :index}
   end
 
   def edit
-    @doc = Document.find params[:id]
+    @document = Document.find params[:id]
 
     render :form
   end
@@ -71,9 +72,10 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    Document.destroy params[:id]
+    message = 'Failed to destroy document.'
+    message = 'Document destroyed.' if Document.destroy params[:id]
 
-    show_message text: 'Document deleted.', redirect: {action: :index}
+    show_message text: message, redirect: {action: :index}
   end
 
   def vote
@@ -95,6 +97,10 @@ class DocumentsController < ApplicationController
 
   private
   def document_attributes
-    params.require(:document).permit(:name, :document_type_id, :link, :voting_meeting_ids, :nonvoting_meeting_ids => [])
+    params.require(:document).permit(:name,
+                                     :document_type_id,
+                                     :link,
+                                     :voting_meeting_ids,
+                                     :nonvoting_meeting_ids => [])
   end
 end

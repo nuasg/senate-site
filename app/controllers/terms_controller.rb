@@ -18,36 +18,28 @@ class TermsController < ApplicationController
   end
 
   def update
-    if Term.find(params[:id]).update_attributes term_attributes
-      flash[:alert] = "Updated term \"#{term_attributes[:name]}\"."
-    else
-      flash[:alert] = 'Failed to update term.'
-    end
+    term = Term.find params[:id]
 
-    redirect_to action: :index
+    message = 'Failed to update term.'
+    message = 'Updated term.' if term.update_attributes term_attributes
+
+    show_message text: message, redirect: {action: :index}
   end
 
   def create
-    term = Term.create term_attributes
+    term = Term.new term_attributes
 
-    if term.save
-      flash[:alert] = "Created term \"#{term_attributes[:name]}\"."
-    else
-      flash[:alert] = 'Failed to create term.'
-    end
+    message = 'Failed to create term.'
+    message = 'Created term.' if term.save
 
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   def destroy
-    term = Term.find(params[:id])
-    name = term.name
+    message = 'Failed to delete term.'
+    message = 'Deleted term.' if Term.destroy params[:id]
 
-    term.destroy
-
-    flash[:alert] = "Deleted term \"#{name}\"."
-
-    redirect_to action: :index
+    show_message text: message, redirect: {action: :index}
   end
 
   private

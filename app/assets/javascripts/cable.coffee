@@ -6,4 +6,5 @@
 #= require_tree ./channels
 
 @App ||= {}
+#noinspection CoffeeScriptModulesDependencies
 App.cable = ActionCable.createConsumer()

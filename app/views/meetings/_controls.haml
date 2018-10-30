@@ -1,5 +1,5 @@
 = button_to 'Open Meeting', {action: :open, id: meeting.id}, {class: 'button', disabled: !meeting.begin.nil?}
 = button_to 'Close Meeting', {action: :close, id: meeting.id}, {class: 'button', disabled: meeting.begin.nil? || !meeting.end.nil?}
 = link_to 'Edit Attendance', {action: :attendance, time: :begin, id: meeting.id}, {class: 'button', disabled: meeting.begin.nil?}
-= button_to 'Unclose Meeting', {action: :unclose, id: meeting.id}, {class: 'button', disabled: meeting.begin.nil? || meeting.end.nil?}
+= button_to 'Unclose Meeting', {action: :reopen, id: meeting.id}, {class: 'button', disabled: meeting.begin.nil? || meeting.end.nil?}
 = button_to 'Reset Meeting', {action: :reset, id: meeting.id}, {class: 'button', disabled: meeting.begin.nil?}

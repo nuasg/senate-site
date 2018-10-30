@@ -3,7 +3,11 @@ class ApplicationController < ActionController::Base
 
   # For logging into the site at all
   def require_active_user
-    unless session[:user_id] || session[:netid]
+    unless session[:user_id] || session[:netid] && User.find_or_sub(id: session[:user_id], netid: session[:netid])
+      reset_session
+      cookies.delete :user_id
+      cookies.delete :netid
+
       if request.fullpath == '/'
         redirect_to controller: :main, action: :login
       else

@@ -1,5 +1,5 @@
-%h1= @doc.new_record? ? 'New Document' : 'Edit Document'
-= form_for @doc, html: {class: 'senate-form'} do |f|
+%h1= @document.new_record? ? 'New Document' : 'Edit Document'
+= form_for @document, html: {class: 'senate-form'} do |f|
   %label{for: 'name'} Document name
   = f.text_field :name, required: true
   %label{for: 'type'} Document type
@@ -10,4 +10,4 @@
   = document_nonvoting_select f
   %label{for: 'voting_meeting_ids'} Meeting (Voting)
   = document_voting_select f
-  = f.submit @doc.new_record? ? 'Create' : 'Update'
+  = f.submit @document.new_record? ? 'Create' : 'Update'
