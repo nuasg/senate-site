@@ -17,13 +17,13 @@
             %td
               = record.object.affiliation_and_name
               = record.hidden_field :id
-            %td= record.select :status, options_for_select(AttendanceRecord.statuses_for_select, record.object.status), {include_blank: true}
+            %td= record_status_select record
             - unless flash[:open]
               %td= record.check_box :late
-            %td= record.check_box :sub, id: "sub-checkbox-#{record.object.affiliation_id}", data: {affiliation: record.object.affiliation_id}, checked: record.object.affiliation.user.nil? || record.object.sub, disabled: record.object.affiliation.user.nil?
+            %td= record_sub_checkbox record
             %td
               .input-group
-                = record.text_field :who, readonly: !record.object.affiliation.user.nil? && !record.object.sub, placeholder: 'Sub Name', id: "sub-name-#{record.object.affiliation.id}", value: record.object.current_or_default_who
-                = record.text_field :netid, readonly: !record.object.affiliation.user.nil? && !record.object.sub, placeholder: 'Sub NetID', id: "sub-netid-#{record.object.affiliation.id}", value: record.object.current_or_default_netid
+                = record_who_field record
+                = record_netid_field record
       .text-right
         = m.submit 'Save Attendance', class: 'button'

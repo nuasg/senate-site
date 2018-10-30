@@ -15,7 +15,7 @@
             %td
               = record.object.affiliation_and_name
               = record.hidden_field :id
-            %td= record.select :end_status, options_for_select(AttendanceRecord.end_statuses_for_select, record.object.end_status), {include_blank: true}
+            %td= record_end_status_select record
             %td= check_box_tag nil, nil, record.object.sub, disabled: true
             %td
               .input-group

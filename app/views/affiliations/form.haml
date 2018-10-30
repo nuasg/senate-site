@@ -3,9 +3,9 @@
   %label{for: 'name'} Affiliation name
   = f.text_field :name, required: true
   %label{for: 'affiliation_type'} Affiliation type
-  = f.select :affiliation_type_id, options_from_collection_for_select(AffiliationType.all, 'id', 'name', !@affiliation.new_record? ? @affiliation.type.id : nil)
+  = affiliation_type_select f
   %label{for: 'id'} Representative
-  = select_tag :user_id, options_from_collection_for_select(User.all, 'id', 'name', @affiliation.user.nil? ? nil : @affiliation.user.id), {include_blank: true}
+  = affiliation_user_select
   %label{for: 'enabled'} Enabled
   = f.check_box :enabled
   = f.submit @affiliation.new_record? ? 'Create' : 'Update'

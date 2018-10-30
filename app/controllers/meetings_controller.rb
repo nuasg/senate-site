@@ -5,7 +5,7 @@ class MeetingsController < ApplicationController
   before_action :require_admin, except: [:index, :show]
 
   def index
-    @meetings = Meeting.all.order date: :desc
+    @meetings_grouped = Meeting.all.order(date: :desc).group_by(&:term)
   end
 
   def new; end

@@ -38,6 +38,12 @@ class Meeting < ApplicationRecord
     AttendanceRecord.find_by(meeting: self, netid: netid)
   end
 
+  def netid_present?(netid)
+    record = attendance_record_by_netid netid
+
+    record&.status == :present
+  end
+
   def open
     if Meeting.open
       raise 'Meeting already open'

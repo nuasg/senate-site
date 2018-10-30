@@ -1,24 +1,24 @@
 %main.display
   #container
     #votes
-      %h1#document{'data-document-id' => @document.nil? ? '-1' : @document.id}= @document.nil? ? 'Nothing At Vote' : @document.name
+      %h1#document{data: {document_id: active_document_id}}= active_document_name
       #meters-container
         #meters
           .vote-meter
             %label Not Voted
-            %span.display#no-votes= @document.nil? ? '' : @document.no_votes
-            %span.bar#no-votes-bar{style: "height: #{@document.nil? ? '0' : @document.no_votes * 100 / @document.votes_possible}%;"}
+            %span.display#no-votes= @document&.no_votes
+            %span.bar#no-votes-bar{style: "height: #{document_no_votes_height}"}
           .vote-meter
             %label Aye
-            %span.display#ayes= @document.nil? ? '' : @document.ayes
-            %span.bar#ayes-bar{style: "height: #{@document.nil? ? '0' : @document.ayes * 100 / @document.votes_possible}%;"}
+            %span.display#ayes= @document&.ayes
+            %span.bar#ayes-bar{style: "height: #{document_ayes_height}%;"}
           .vote-meter
             %label Nay
-            %span.display#nays= @document.nil? ? '' : @document.nays
-            %span.bar#nays-bar{style: "height: #{@document.nil? ? '0' : @document.nays * 100 / @document.votes_possible}%;"}
+            %span.display#nays= @document&.nays
+            %span.bar#nays-bar{style: "height: #{document_nays_height}%;"}
           .vote-meter
             %label Abstain
-            %span.display#abstains= @document.nil? ? '' : @document.abstains
-            %span.bar#abstains-bar{style: "height: #{@document.nil? ? '0' : @document.abstains * 100 / @document.votes_possible}%;"}
+            %span.display#abstains= @document&.abstains
+            %span.bar#abstains-bar{style: "height: #{document_abstains_height}%;"}
     %footer
       = image_tag 'logo-horiz-white.png'

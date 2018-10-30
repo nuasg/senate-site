@@ -2,6 +2,7 @@ class DocumentsController < ApplicationController
   before_action :require_admin, except: [:vote]
 
   def index
+    @documents_typed = Document.all.group_by(&:document_type)
   end
 
   def new
@@ -76,14 +77,17 @@ class DocumentsController < ApplicationController
   end
 
   def vote
-    doc = Document.find params[:id]
+    document = Document.find params[:id]
 
-    raise "Couldn't find that document." if doc.nil?
+    raise "Couldn't find that document." if document.nil?
 
-    doc.vote @user.affiliation, params[:vote]
+    document.vote @user.affiliation, params[:vote]
 
     if request.xhr?
-      render json: {result: 'success', new_content: view_context._document_user_vote(doc), document_id: doc.id}
+      render json:
+                 {result: 'success',
+                  new_content: render(partial: 'shared/document_vote_controls', locals: {document: document}),
+                  document_id: document.id}
     else
       redirect_to controller: :meetings, action: :show, id: doc.voting_meeting.id, anchor: 'm-documents'
     end

@@ -34,7 +34,7 @@ class Document < ApplicationRecord
     VoteRecord.where('document_id = ? AND affiliation_id = ? AND vote != 0', self.id, user.affiliation_id).count != 0
   end
 
-  def get_user_vote(user)
+  def user_vote(user)
     return nil if user.affiliation_id.nil?
     VoteRecord.find_by(document_id: self.id, affiliation_id: user.affiliation_id)
   end

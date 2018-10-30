@@ -2,6 +2,6 @@
 .item-listing.add
   = link_to(controller: :terms, action: :new) do
     %span.fas.fa-plus-circle
-    &nbsp;Add a Term
+    Add a Term
 - @terms.each do |term|
-  = render_term term
+  = render partial: 'shared/models/term', locals: {term: term}

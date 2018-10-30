@@ -3,9 +3,9 @@
   .item-listing.add
     = link_to(controller: :documents, action: :new) do
       %span.fas.fa-plus-circle
-      &nbsp;Add a Document
-- Document.all.group_by(&:document_type).each do |type, docs|
+      Add a Document
+- @documents_typed.each do |type, documents|
   %h3= type.name
   %div
-    - docs.each do |doc|
-      = render_document(doc)
+    - documents.each do |document|
+      = render partial: 'shared/document', locals: {document: document, not_voting: true}
