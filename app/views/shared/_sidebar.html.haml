@@ -1,5 +1,5 @@
 %section#sidebar
-  = image_tag 'asg-notext.png', id: 'sidebar-logo'
+  = link_to image_tag('asg-notext.png', id: 'sidebar-logo'), 'https://asg.northwestern.edu/', target: '_blank'
   %section#profile
     = image_tag 'user.png', id: 'profile-image'
     %h4#profile-name= @user.name
