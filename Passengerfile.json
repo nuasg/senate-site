@@ -2,5 +2,8 @@
 	"environment": "production",
 	"port": "3000",
 	"daemonize": true,
-	"user": "sdc2637"
+	"user": "sdc2637",
+	"unlimited_concurrency_paths": [
+		"/cable"
+	]
 }
