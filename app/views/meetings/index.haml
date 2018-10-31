@@ -17,8 +17,7 @@
           - meeting.documents.each do |document|
             %span= document.name
         - if is_admin?
-          .options
-            = render partial: 'shared/context_button'
+          = render partial: 'shared/context_button'
           .context-menu
             %ul
               %li= meeting_edit_button meeting
