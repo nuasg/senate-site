@@ -41,7 +41,7 @@ class Meeting < ApplicationRecord
   def netid_present?(netid)
     record = attendance_record_by_netid netid
 
-    record&.status == :present
+    record&.status == :present || record&.status == 'present'
   end
 
   def open

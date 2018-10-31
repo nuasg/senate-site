@@ -83,13 +83,11 @@ class DocumentsController < ApplicationController
 
     raise "Couldn't find that document." if document.nil?
 
-    document.vote @user.affiliation, params[:vote]
+    document.vote @user, params[:vote]
 
     if request.xhr?
-      render json:
-                 {result: 'success',
-                  new_content: render(partial: 'shared/document_vote_controls', locals: {document: document}),
-                  document_id: document.id}
+      render json: {result: 'success',
+                    new_content: render_to_string('shared/_document_vote_controls', locals: {document: document}, layout: false)}
     else
       redirect_to controller: :meetings, action: :show, id: doc.voting_meeting.id, anchor: 'm-documents'
     end

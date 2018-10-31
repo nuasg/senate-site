@@ -57,12 +57,14 @@ module MeetingsHelper
 
   def record_status_select(form_record)
     form_record.select :status,
-                       options_for_select(AttendanceRecord.statuses_for_select, form_record.object.status)
+                       options_for_select(AttendanceRecord.statuses_for_select, form_record.object.status),
+                       {include_blank: true}
   end
 
   def record_end_status_select(form_record)
     form_record.select :end_status,
-                       options_for_select(AttendanceRecord.end_statuses_for_select, form_record.object.end_status)
+                       options_for_select(AttendanceRecord.end_statuses_for_select, form_record.object.end_status),
+                       {include_blank: true}
   end
 
   def record_who_readonly(record)

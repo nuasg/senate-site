@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Lato:400,500,700|Montserrat:400,500,700">
+        <style>
+            @keyframes background-pulse {
+                0% {
+                    background-color: #401F68;
+                }
+
+                100% {
+                    background-color: #4E2A84;
+                }
+            }
+
+            @keyframes fall {
+                0% {
+                    transform: rotate(0deg);
+                    top: 0;
+                    left: 0;
+                }
+
+                50% {
+                    transform: rotate(720deg);
+                    top: 0;
+                    left: 0;
+                }
+
+                55% {
+                    top: 3.25em;
+                    left: 0;
+                    transform: rotate(720deg);
+                }
+
+                62% {
+                    top: 1em;
+                    left: 4em;
+                    transform: rotate(810deg);
+                }
+
+                69% {
+                    top: 4em;
+                    left: 8em;
+                    transform: rotate(810deg) scaleX(1);
+                }
+
+                100% {
+                    top: 6em;
+                    left: 8em;
+                    transform: rotate(810deg) scaleX(0.4);
+                }
+            }
+
+
+        </style>
+    </head>
+    <body style="background-color: #401F68; height: 100%; margin: 0; animation: background-pulse 3s alternate infinite ease-in-out ;">
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <img src="/error/503-logo.png" style="width: 100px; animation: fall 5s forwards, fall-y 5s forwards ease-out; position: relative;">
+            <h2 style="font-family: Montserrat, sans-serif; color: #ea3345; margin-top: 2em; text-align: center;">We are currently experiencing an outage.<br>Please check back later.</h2>
+        </div>
+    </body>
+</html>

@@ -5,7 +5,7 @@ module DocumentsHelper
     voting_button vote_type: :aye,
                   document: document,
                   can_vote: user.can_vote_now?(document),
-                  user_vote: document.user_vote(user)
+                  user_vote: document.user_vote(user)&.vote
   end
 
   #@param [Document] document
@@ -14,7 +14,7 @@ module DocumentsHelper
     voting_button vote_type: :nay,
                   document: document,
                   can_vote: user.can_vote_now?(document),
-                  user_vote: document.user_vote(user)
+                  user_vote: document.user_vote(user)&.vote
   end
 
   #@param [Document] document
@@ -23,7 +23,7 @@ module DocumentsHelper
     voting_button vote_type: :abstain,
                   document: document,
                   can_vote: user.can_vote_now?(document),
-                  user_vote: document.user_vote(user)
+                  user_vote: document.user_vote(user)&.vote
   end
 
   #@param [Document] document
@@ -98,15 +98,19 @@ module DocumentsHelper
                          {include_blank: true}
   end
 
+  def document_status(document)
+    document.result + " (#{document.ayes}-#{document.nays})"
+  end
+
   private
   #@param [Symbol] vote_type
   #@param [Document] document
   #@param [Symbol] user_vote
   def voting_button(vote_type:, document:, can_vote:, user_vote:)
-    is_user_vote = user_vote == vote_type ? 'user_vote' : ''
+    is_user_vote = user_vote == vote_type.to_s ? 'user_vote' : ''
 
-    button_to vote_type.to_s,
-              {controller: :documents, action: :vote, vote: :aye, id: document.id},
+    button_to vote_type.to_s.capitalize,
+              {controller: :documents, action: :vote, vote: vote_type, id: document.id},
               {remote: true, disabled: !can_vote, class: is_user_vote}
   end
 

@@ -8,7 +8,7 @@ module ApplicationCable
 
     protected
     def find_verified_user
-      user = User.find_by id: cookies.signed[:user_id]
+      user = User.find_or_sub id: cookies.signed[:user_id], netid: cookies.signed[:netid]
 
       return user if user
       reject_unauthorized_connection

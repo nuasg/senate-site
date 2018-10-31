@@ -3,13 +3,12 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import 'color';
 
-div.voting, div.voting:not([data-voting-enabled]) {
+div.voting, div.admin {
   input[type="submit"], input[type="submit"][disabled], input[type="submit"][disabled]:hover {
     width: 100%;
     padding: 8px;
     border: none;
     border-radius: 5px;
-    margin: 0 8px;
     outline: none;
 
     cursor: not-allowed;
@@ -20,25 +19,27 @@ div.voting, div.voting:not([data-voting-enabled]) {
     color: $nu-purple-2;
   }
 
-  display: flex;
-  justify-content: space-around;
-}
-
-div.voting[data-voting-enabled="true"], div.voting:not([data-voting-enabled]) {
-  input[type="submit"]:hover {
-    background-color: $nu-purple-3;
-  }
-
-  input[type="submit"] {
+  input[type="submit"]:not([disabled]) {
     color: $nu-purple-5;
     background-color: $nu-purple-1;
     cursor: pointer;
   }
-}
 
-div.voting[data-voting-enabled="false"] {
-  input[type="submit"], input[type="button"]:hover {
-    color: $nu-purple-3;
-    cursor: not-allowed;
+  input[type="submit"]:not([disabled]):hover {
+   background-color: $nu-purple-3;
   }
+
+  input[type="submit"].user_vote, input[type="submit"].user_vote:hover, input[disabled][type="submit"].user_vote,
+  input[disabled][type="submit"].user_vote:hover {
+    background-color: $asg-blue;
+    color: #222;
+  }
+
+  ~ div.result {
+    margin-top: 10px;
+    color: $nu-black-2;
+  }
+
+  display: flex;
+  justify-content: space-between;
 }

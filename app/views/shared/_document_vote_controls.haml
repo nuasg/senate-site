@@ -1,4 +1,4 @@
-.voting{data: {voting_enabled: @user.can_vote_now?(document), document_id: document.id}}
+.voting
   = aye_button document: document, user: @user
   = nay_button document: document, user: @user
   = abstain_button document: document, user: @user

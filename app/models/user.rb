@@ -10,7 +10,7 @@ class User < ApplicationRecord
   def can_vote_now?(document)
     voting_meeting = document.voting_meeting
 
-    has_voting_meeting = voting_meeting.nil?
+    has_voting_meeting = !voting_meeting.nil?
     voting_meeting_open = voting_meeting.open?
     present_at_meeting = voting_meeting.netid_present? self.netid
     not_admin = !self.admin

@@ -3,7 +3,7 @@
   - if @meeting.voting_documents.empty?
     %h6 No documents of this type.
   - @meeting.voting_documents.each do |document|
-    = render partial: 'shared/document', locals: {document: document}
+    = render partial: 'shared/document', locals: {document: document, not_voting: false}
 .voting-section
   %h4 Not Voting
   -if @meeting.nonvoting_documents.empty?

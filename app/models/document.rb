@@ -1,4 +1,6 @@
 class Document < ApplicationRecord
+  include DocumentsHelper
+
   has_many :document_links
 
   has_many :vote_records
@@ -14,6 +16,7 @@ class Document < ApplicationRecord
   accepts_nested_attributes_for :document_links
 
   before_destroy :kill_doc_links
+  after_validation :broadcast_update
 
   validates :name, presence: true
 
@@ -26,15 +29,18 @@ class Document < ApplicationRecord
     VoteRecord.find_by(document_id: self.id, affiliation_id: user.affiliation_id)
   end
 
-  def vote(affiliation, vote)
+  def vote(user, vote)
+    affiliation = user.affiliation
+
     raise 'Voting not open.' unless self.voting_open && self.voting_meeting.open?
-    raise 'Not authorized to vote.' unless @user.can_vote_now?(self)
+    raise 'Not authorized to vote.' unless user.can_vote_now?(self)
 
     existing = VoteRecord.find_by(affiliation_id: affiliation.id, document_id: self.id)
 
-    existing.update_attributes vote: vote and return unless existing.nil?
+    VoteRecord.create affiliation_id: affiliation.id, vote: vote, document_id: self.id if existing.nil?
+    existing.update_attributes vote: vote unless existing.nil?
 
-    VoteRecord.create affiliation_id: affiliation.id, vote: vote, document_id: self.id
+    DocumentVoteJob.perform_now self, document_status(self)
   end
 
   def votes
@@ -91,8 +97,6 @@ class Document < ApplicationRecord
     raise 'No voting meeting linked.' if self.voting_meeting.nil?
     raise 'Voting meeting not open.' unless Meeting.open == self.voting_meeting
 
-    self.update_attribute :voting_open, true
-
     records = []
     authorized_voters.each do |voter|
       if VoteRecord.find_by(affiliation: voter.representing, document: self).nil?
@@ -103,6 +107,9 @@ class Document < ApplicationRecord
     VoteRecord.transaction do
       records.each &:save
     end
+
+    self.voting_open = true
+    save
   end
 
   def reset_votes
@@ -111,15 +118,29 @@ class Document < ApplicationRecord
   end
 
   def close_voting
-    self.update_attribute :voting_open, false\
+    self.voting_open = false
+    save
   end
 
   def self.open
     Document.find_by voting_open: true
   end
 
+  def result
+    return 'Not Voted' if self.vote_records.count == 0
+    return 'In Progress' if self.voting_open
+    return 'Passed' if self.ayes > self.nays
+    return 'Failed' if self.ayes <= self.nays
+  end
+
   private
   def kill_doc_links
     DocumentLink.where(document_id: id).delete_all
+  end
+
+  def broadcast_update
+    if self.voting_open_changed?
+      BroadcastDocumentJob.perform_now self
+    end
   end
 end
