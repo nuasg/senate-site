@@ -31,7 +31,12 @@ class UsersController < ApplicationController
 
   def destroy
     message = 'Failed to delete user.'
-    message = 'Deleted user.' if User.destroy params[:id]
+
+    if params[:id] == session[:user_id]
+      message = 'You cannot delete yourself.' if params[:id] == session[:user_id]
+    elsif User.destroy params[:id]
+      message = 'Deleted user.'
+    end
 
     show_message text: message, redirect: {action: :index}
   end
