@@ -4,7 +4,6 @@ class User < ApplicationRecord
   validates :name, :netid, presence: true
 
   before_save :downcase_netid
-  before_destroy :verify_not_logged
 
   #@param [Document] document
   def can_vote_now?(document)
@@ -137,9 +136,5 @@ class User < ApplicationRecord
   private
   def downcase_netid
     netid.downcase!
-  end
-
-  def verify_not_logged
-    raise 'You cannot delete yourself.' if @user.id == self.id
   end
 end
