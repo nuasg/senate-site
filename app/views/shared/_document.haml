@@ -2,7 +2,7 @@
   .title
     %span= link_to document.name, document.link
   .middle
-    = render partial: 'shared/document_admin_controls', locals: {document: document} if is_admin? || not_voting
+    = render partial: 'shared/document_admin_controls', locals: {document: document} if is_admin? && !not_voting
     = render partial: 'shared/document_vote_controls', locals: {document: document} unless is_admin? || not_voting
   = render partial: 'shared/context_button'
   .context-menu
