@@ -1,6 +1,6 @@
 module ApplicationHelper
   def is_admin?
-    @user&.admin
+    @user.admin
   end
 
   def logged_in?
