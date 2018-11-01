@@ -1,6 +1,6 @@
 .item-listing{data: {document_id: document.id, model: 'document'}}
   .title
-    %span= link_to document.name, document.link
+    %span= link_to document.name, document.link, target: '_blank'
   .middle
     = render partial: 'shared/document_admin_controls', locals: {document: document} if is_admin? && !not_voting
     = render partial: 'shared/document_vote_controls', locals: {document: document} unless is_admin? || not_voting

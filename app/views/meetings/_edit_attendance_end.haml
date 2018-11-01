@@ -10,7 +10,7 @@
           %th Status
           %th Sub
           %th Sub Name and NetID
-        = m.fields_for :attendance_records, @meeting.attendance_records.where(status: :present) do |record|
+        = m.fields_for :attendance_records, @meeting.ordered_present_records do |record|
           %tr
             %td
               = record.object.affiliation_and_name

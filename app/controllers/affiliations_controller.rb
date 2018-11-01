@@ -2,7 +2,7 @@ class AffiliationsController < ApplicationController
   before_action :require_admin
 
   def index
-    @affiliations = Affiliation.all
+    @affiliations = Affiliation.all.order :affiliation_type_id, :name
   end
 
   def new

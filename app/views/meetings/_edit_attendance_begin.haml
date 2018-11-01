@@ -12,7 +12,7 @@
             %th Late
           %th Sub
           %th Sub Name and NetID
-        = m.fields_for :attendance_records do |record|
+        = m.fields_for :attendance_records, @meeting.ordered_records do |record|
           %tr
             %td
               = record.object.affiliation_and_name

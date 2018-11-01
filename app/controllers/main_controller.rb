@@ -5,7 +5,7 @@ class MainController < ApplicationController
   end
 
   def roster
-    @affiliations = Affiliation.all.order(affiliation_type_id: :asc).order(name: :asc)
+    @affiliations = Affiliation.all.order :affiliation_type_id, :name
 
     render layout: 'application'
   end

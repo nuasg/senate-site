@@ -98,6 +98,16 @@ class Meeting < ApplicationRecord
     self.update! end: DateTime.now
   end
 
+  def ordered_records
+    self.attendance_records.
+        joins("INNER JOIN affiliations ON affiliations.id = attendance_records.affiliation_id").
+        order('affiliations.affiliation_type_id ASC, affiliations.name ASC')
+  end
+
+  def ordered_present_records
+    self.ordered_records.where(status: :present)
+  end
+
   private
   def destroy_links
     DocumentLink.where(meeting_id: self.id).delete_all
